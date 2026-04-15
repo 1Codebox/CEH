@@ -1,0 +1,125 @@
+🌐 Shodan & Censys (Professional Recon Tools)
+
+Both Shodan and Censys are powerful platforms used in active reconnaissance to discover internet-facing assets like servers, IoT devices, and services.
+
+👉 Think of them as:
+
+Google → searches websites
+Shodan/Censys → 🔥 search the entire internet infrastructure
+--------------------------------------------------------------------
+
+🔍 What is Shodan?
+
+Shodan scans the internet and indexes:
+
+Open ports
+Running services
+Devices (cameras, routers, servers)
+✅ What You Can Find:
+Exposed databases
+Open RDP/SSH ports
+IoT devices (CCTV, webcams)
+Misconfigured servers
+
+---------------------------------------------------------------------
+
+🔍 What is Censys?
+
+Censys is more research-focused and provides:
+
+Deep SSL/TLS data
+Certificate analysis
+Internet-wide scanning datasets
+
+👉 Used heavily by:
+
+Security researchers
+Blue teams
+Threat intelligence analysts
+
+---------------------------------------------------------------------
+
+| Feature      | Shodan     | Censys            |
+| ------------ | ---------- | ----------------- |
+| Ease of Use  | Easy       | Moderate          |
+| Data Depth   | Medium     | Deep 🔥           |
+| SSL Analysis | Basic      | Advanced          |
+| UI           | Simple     | Technical         |
+| Use Case     | Pentesting | Research/Analysis |
+
+----------------------------------------------------
+
+// shodan use discussed already
+
+----------------------------------------------------
+
+🔎 Censys Queries (Advanced Search)
+
+🎯 Find HTTPS Services
+services.service_name: HTTP
+
+🔐 Find SSL Certificates
+services.tls.certificates.leaf_data.subject.common_name: example.com
+
+🌐 Find Domain Assets
+example.com
+
+🔎 Filter by Port
+services.port: 443
+
+Good for: expired certs, misconfigured https, leaked subdomains
+
+----------------------------------------------------
+
+🧠 Real-World Workflow (Professional)
+
+🟢 Step 1 — Start with Domain
+
+Example:
+
+target.com
+
+🟢 Step 2 — Use Censys
+Find:
+Subdomains
+Certificates
+IP addresses
+
+🟢 Step 3 — Use Shodan
+Input IPs from Censys
+Discover:
+Open ports
+Running services
+
+🟢 Step 4 — Analyze Exposure
+
+Look for:
+
+Open SSH/RDP
+Outdated software
+Public dashboards
+
+🟢 Step 5 — Combine with Other Tools
+
+Use:
+
+Nmap
+Amass
+
+👉 For deeper enumeration
+
+🧩 Example Scenario
+
+Target: company.com
+
+Censys → Found:
+Subdomain: dev.company.com
+IP: 192.x.x.x
+Shodan → Found:
+Port 22 (SSH open)
+Apache server running
+
+👉 Now you have:
+
+Attack surface
+Entry points
