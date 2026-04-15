@@ -19,6 +19,13 @@ NS Record → Name servers
 CNAME → Alias domain
 TXT → Extra info (SPF, verification, etc.)
 
+----------------------------------
+Tip:
+builtwith.com
+wappalyzer.com
+
+check website's full technology stack
+
 ...........................................................
 WHOIS & DNS = passive recon (safe)
 Zone transfer attempts = can be flagged
