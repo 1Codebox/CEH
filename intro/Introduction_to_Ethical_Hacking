@@ -1,1 +1,281 @@
 
+
+# What is Ethical Hacking?
+
+**Ethical hacking** is the practice of **legally testing computer systems, networks, or applications** to identify security weaknesses before malicious hackers exploit them.
+
+* Ethical hackers (also called **penetration testers**) use the same techniques as attackers—but **with permission**.
+* Goal: **Improve security posture** by finding and fixing vulnerabilities.
+
+📌 Example:
+A company hires an ethical hacker to test its website. The hacker finds a login bypass flaw and reports it—helping prevent a real breach.
+
+---
+
+# Hacking vs. Ethical Hacking
+
+| Aspect     | Hacking                   | Ethical Hacking      |
+| ---------- | ------------------------- | -------------------- |
+| Intent     | Malicious or unauthorized | Legal and authorized |
+| Goal       | Steal, disrupt, damage    | Secure systems       |
+| Permission | No                        | Yes                  |
+| Outcome    | Harmful                   | Beneficial           |
+
+📌 Key Difference:
+**Intent + Permission = Ethical Hacking**
+
+---
+
+# Types of Hackers
+
+### 🟢 White Hat Hackers
+
+* Ethical hackers
+* Work legally to secure systems
+* Often employed by companies
+
+### 🔴 Black Hat Hackers
+
+* Malicious attackers
+* Steal data, spread malware, commit fraud
+
+### ⚪ Grey Hat Hackers
+
+* Mix of both
+* May hack without permission but don’t intend harm
+
+### 🧑‍💻 Script Kiddies
+
+* Beginners using pre-made tools
+* Limited technical knowledge
+* Often cause damage unintentionally
+
+---
+
+# 5 Phases of Hacking (With Practical Scenarios)
+
+### 1. Reconnaissance (Information Gathering)
+
+* Collecting target info (IP, domains, employees)
+
+📌 Example:
+An attacker uses LinkedIn to find employee emails.
+
+---
+
+### 2. Scanning
+
+* Identifying open ports, services, vulnerabilities
+
+📌 Example:
+Scanning reveals port 22 (SSH) is open.
+
+---
+
+### 3. Gaining Access
+
+* Exploiting vulnerabilities to enter system
+
+📌 Example:
+Using weak passwords to log into SSH.
+
+---
+
+### 4. Maintaining Access
+
+* Installing backdoors or malware
+
+📌 Example:
+Attacker installs hidden admin account.
+
+---
+
+### 5. Covering Tracks
+
+* Deleting logs to avoid detection
+
+📌 Example:
+Removing login history.
+
+---
+
+# CIA Triad: Core of Cybersecurity
+
+### 🔒 Confidentiality
+
+* Data is accessible **only to authorized users**
+
+📌 Example: Encryption of passwords
+
+---
+
+### ✔️ Integrity
+
+* Data remains **accurate and unaltered**
+
+📌 Example: Hashing ensures file integrity
+
+---
+
+### ⚡ Availability
+
+* Systems/data available when needed
+
+📌 Example: Protection against DDoS attacks
+
+---
+
+
+# Information Security Controls
+
+### 1. Administrative Controls
+
+* Policies, procedures, training
+
+📌 Example: Password policies
+
+---
+
+### 2. Technical Controls
+
+* Technology-based protections
+
+📌 Example: Firewalls, antivirus, encryption
+
+---
+
+### 3. Physical Controls
+
+* Protect physical access
+
+📌 Example: CCTV, biometric locks
+
+---
+
+# Security Testing Types
+
+### 🔍 VAPT (Vulnerability Assessment & Penetration Testing)
+
+* Combines:
+
+  * Vulnerability scanning
+  * Exploitation testing
+
+---
+
+### 🛠️ Penetration Testing
+
+* Simulated real attack
+* Focus: Exploiting vulnerabilities
+
+---
+
+### 🎯 Red Teaming
+
+* Full-scale attack simulation
+* Tests detection & response
+
+📌 Example:
+Red team tries to physically enter office + hack systems
+
+---
+
+# Key Concepts
+
+### ⚠️ Threat
+
+* Potential danger
+
+📌 Example: Hacker, malware
+
+---
+
+### 🕳️ Vulnerability
+
+* Weakness in system
+
+📌 Example: Outdated software
+
+---
+
+### 💥 Exploit
+
+* Method to use vulnerability
+
+📌 Example: SQL Injection
+
+---
+
+### 📉 Risk
+
+* Likelihood × impact of threat exploiting vulnerability
+
+📌 Example: High risk if sensitive data is exposed
+
+---
+
+# ✅ Cyber Laws Globally
+
+Cyber laws vary by country but aim to **prevent cybercrime and protect data**.
+
+### 🌍 Examples:
+
+* 🇺🇸 Computer Fraud and Abuse Act
+
+  * Governs unauthorized access
+
+* 🇪🇺 General Data Protection Regulation
+
+  * Strong data protection laws
+
+* 🇵🇰 Prevention of Electronic Crimes Act
+
+  * Covers cybercrime in Pakistan
+
+---
+
+# ✅ Career Paths & Certifications
+
+## 🔹 Career Roles
+
+* Penetration Tester
+* Security Analyst
+* SOC Analyst
+* Red Team Specialist
+* Bug Bounty Hunter
+* Security Engineer
+
+---
+
+## 📜 Popular Certifications
+
+### 🥇 Certified Ethical Hacker (CEH)
+
+* Beginner-friendly
+* Covers core hacking concepts
+
+---
+
+### 🔥 Offensive Security Certified Professional (OSCP)
+
+* Advanced & hands-on
+* Highly respected
+
+---
+
+### ⚡ Practical Network Penetration Tester (PNPT)
+
+* Real-world scenarios
+* Focus on practical skills
+
+---
+
+### 🎯 Other Notable Certifications
+
+* CompTIA Security+
+* CISSP (advanced)
+* eJPT (beginner-friendly)
+
+---
+
+👉 Start with basics → practice in labs → earn certifications → build real-world experience.
