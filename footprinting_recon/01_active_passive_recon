@@ -1,0 +1,64 @@
+What is Footprinting? (Passive vs. Active)
+Footprinting is the process of gathering information about a target system, network or organization to identify potential vulnerabilities before launching an attack.
+It's the first step in ehtical hacking, where hackers collect as much data as possible.
+
+**Passive recon** = collecting information without directly interacting with the target system.
+You stay “invisible” — the target doesn’t know you’re gathering data.
+
+-----------------------------------------------------------------------------------
+
+**Tools used in passive recon**
+
+🧠 OSINT & Intelligence Gathering
+Shodan → “Google for hackers” (find exposed devices, ports, services)
+Maltego → Visual link analysis (domains, emails, people, IPs)
+theHarvester → Emails, domains, subdomains from public sources
+Recon-ng → Full OSINT framework (like Metasploit for recon)
+
+🌐 Domain & DNS Recon
+Amass → Subdomain enumeration (very powerful)
+Subfinder → Fast passive subdomain discovery
+DNSdumpster / crt.sh → Certificate + DNS data
+WHOIS, nslookup, dig → Basic but essential tools
+
+📡 Internet-wide Search Engines
+Netlas → Maps internet infrastructure (IPs, ports, services)
+Censys → Similar to Shodan, more research-focused
+
+📊 Passive Network Analysis
+Wireshark → Analyze captured traffic without injecting packets
+
+-----------------------------------------------------------------------------------
+
+**🔴 Active Reconnaissance** = direct interaction with the target system to gather information.
+⚡ Active Reconnaissance Tools (Direct Interaction)
+
+👉 Sends packets → higher risk of detection but more accurate
+
+🔎 Network Scanning & Enumeration
+Nmap → 🔥 Most important tool
+Port scanning
+OS detection
+Service/version detection
+Masscan → Ultra-fast port scanner (internet-scale)
+RustScan → Faster wrapper for Nmap
+
+🔌 Connection & Banner Grabbing
+Netcat (nc) → “Swiss army knife” for networking
+Telnet → Manual service interaction
+Hping3 → Custom packet crafting & scanning
+
+🧪 Vulnerability Scanning
+OpenVAS → Open-source vulnerability scanner
+Nessus → Industry-standard vulnerability scanner
+
+🌍 Web Recon & Scanning
+Dirb / Gobuster / FFUF → Directory brute forcing
+Nikto → Web server vulnerability scanning
+Burp Suite (active scan) → Web app recon & testing
+
+🌐 DNS & Subdomain (Active)
+Fierce → DNS enumeration (can be active)
+
+-----------------------------------------------------------------------------------
+
