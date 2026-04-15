@@ -1,0 +1,39 @@
+Email harvesting is the process of collecting email addresses related to a target (person, company, or domain) using public sources.
+
+👉 It’s widely used in:
+
+Passive reconnaissance
+Bug bounty
+Penetration testing (authorized only)
+Threat intelligence
+-----------------------------------------
+
+🔍 What Can You Find?
+Employee emails (e.g., john@company.com)
+Admin/support emails
+Leaked emails from breaches
+Email patterns (like firstname.lastname@domain.com)
+
+👉 These become entry points for:
+
+Phishing simulations
+Credential testing (authorized)
+Attack surface mapping
+
+--------------------------------------------
+
+Email Harvesting Tools
+🔹1. theHarvester -> theHarvester -d example.com -b all
+🔹2. Hunter.io -> Finds emails by domain
+🔹3. EmailHippo -> Validates if an email exists
+🔹4. Holehe -> Checks where an email is registered, Finds linked accounts (social media, services)
+🔹5. Maltego -> maps: emails, domain, people
+🔹6. Recon-ng -> Automates email discovery work with api
+🔹7. SpiderFoot -> Fully automated scanning
+
+------------------------------------------------
+
+🔎 Google Dorking for Email Harvesting
+Find Company Emails -> "@company.com"
+Narrow Down Results -> site:linkedin.com "@company.com"
+Find Documents Containing Emails -> filetype:pdf "@company.com", filetype:xls "email"
