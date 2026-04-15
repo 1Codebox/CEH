@@ -18,7 +18,7 @@ intitle:"index of"  → Directory listing pages
 filetype:pdf        → Specific file types
 cache:              → View cached version
 
-🔥 Most Powerful Google Dorks (Used by Professionals)
+🔥 Some Powerful Google Dorks (Used by Professionals)
 📂 Find Open Directories
 intitle:"index of"
 intitle:"index of" "backup"
@@ -57,6 +57,77 @@ intitle:"Live View / - AXIS"
 💳 Find Exposed Credentials (⚠️ Ethical Use Only)
 "username" "password" filetype:xls
 "login" "password" filetype:csv
+---------------------------------------------------------------------------------
+
+🛠️ Tools & Scripts for Google Dorking
+
+🔹 1. GHDB
+Maintained by Exploit Database
+Huge collection of real-world dorks
+Categorized (files, vulnerabilities, login pages)
+
+🔹 2. theHarvester
+Automates Google searches
+Extracts:
+Emails
+Domains
+Hosts
+
+🔹 3. Recon-ng
+Modular recon framework
+Automates Google dork queries via APIs
+
+🔹 4. GoogD0rker
+Automates Google dork searches
+Extracts vulnerable URLs
+
+🔹 5. DorkSearch
+Runs multiple dorks at once
+Good for bug bounty workflows
+
+🔹 6. SpiderFoot
+Combines Google dorking with OSINT
+Fully automated reconnaissance
+
+--------------------------------------------------------
+websites:
+
+| Tool      | Best For       | Type          |
+| --------- | -------------- | ------------- |
+| Shodan    | Devices, ports | Active recon  |
+| Censys    | Deep scanning  | Active recon  |
+| ZoomEye   | IoT discovery  | Active recon  |
+| PublicWWW | Code search    | Passive recon |
+| crt.sh    | Subdomains     | Passive recon |
+| Netlas    | Modern recon   | Hybrid        |
 
 
+Typical combo:
+
+Google Dorking + GHDB
+Shodan / Censys
+crt.sh + Amass + nmap
+
+➡️ This gives full attack surface visibility
+
+Use different Google regions (google.com, google.co.uk, etc.)
+Try time filters (recent leaks)
+Avoid getting blocked → slow down queries
+--------------------------------------------------------------
+
+🧩 Real-World Workflow
+
+Step 1 — Start Broad
+site:target.com
+
+Step 2 — Find Sensitive Data
+site:target.com filetype:pdf
+site:target.com filetype:sql
+
+Step 3 — Look for Entry Points
+site:target.com inurl:admin
+site:target.com inurl:login
+
+Step 4 — Combine Everything
+site:target.com inurl:admin filetype:php
 
