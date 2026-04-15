@@ -1,0 +1,146 @@
+Metadata extraction means pulling hidden information from files like:
+
+PDFs
+Images
+Word/Excel documents
+
+👉 This hidden data (metadata) can reveal:
+
+Author names
+Emails
+Software used
+File paths (very useful!)
+GPS location (for images)
+Company/internal system details
+
+---------------------------------------------------------------------
+
+🔍 Why Metadata is Important in Recon
+
+Professionals use it to:
+
+Identify employees (usernames, emails)
+Discover internal systems (e.g., C:\Users\John\Desktop)
+Find software versions (attack surface)
+Track document origin
+
+👉 Sometimes one PDF = 🔥 full internal leak
+
+----------------------------------------------------------------------
+
+🛠️ Top Metadata Extraction Tools
+
+🔹 1. ExifTool
+🔥 Most powerful & widely used
+Works on almost all file types
+exiftool file.pdf
+exiftool image.jpg
+
+👉 Extracts:
+
+Author
+Creation date
+GPS data
+Software
+
+----------------------
+🔹 2. FOCA
+Designed for pentesters
+Scans websites for documents
+Extracts metadata automatically
+----------------------
+🔹 3. Metagoofil
+Finds public documents + extracts metadata
+metagoofil -d example.com -t pdf,doc,xls -l 50 -n 20 -o output
+-----------------------------
+🔹 4. ExifCleaner
+Removes metadata (defensive use)
+------------------------------
+🔹 5. Strings
+Extracts readable strings from files
+strings file.pdf
+------------------------------
+🔹 6. Binwalk
+Used for deep extraction (firmware, binaries)
+-------------------------------------------------------------------------
+
+🔎 What to Look For in Metadata
+📄 Documents (PDF, DOCX)
+Author name
+Company name
+Internal file paths
+Software (e.g., Word version)
+
+📷 Images
+GPS coordinates 📍
+Camera/device model
+Date/time
+
+--------------------------------------
+🧾 Example Output
+Author: John Doe
+Company: ABC Corp
+Creator: Microsoft Word 2016
+File Path: C:\Users\John\Documents\confidential.docx
+
+👉 This reveals:
+
+Username → John
+OS → Windows
+Software → Word 2016
+
+----------------------------------------------------------------------
+
+🧠 Real-World Workflow (Professional)
+
+🟢 Step 1 — Find Documents
+
+Use:
+
+Google dorking
+site:example.com filetype:pdf
+
+🟢 Step 2 — Download Files
+PDFs
+DOCX
+XLS
+
+🟢 Step 3 — Extract Metadata
+
+Use:
+
+ExifTool
+Metagoofil
+
+🟢 Step 4 — Analyze Results
+
+Look for:
+
+Emails
+Usernames
+File paths
+Software
+
+🟢 Step 5 — Pivot
+
+Use extracted data:
+
+Emails → email harvesting
+Usernames → social media enum
+Software → vulnerability research
+🧩 Example Scenario
+
+Target: company.com
+
+Found PDF via Google
+Ran ExifTool → got:
+Author: ahmed
+Email: ahmed@company.com
+Found path:
+C:\Users\Ahmed\HR\salary.xlsx
+
+👉 Now you have:
+
+Employee name
+Email
+Internal structure
