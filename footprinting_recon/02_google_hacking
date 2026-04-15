@@ -1,0 +1,62 @@
+**Google Hacking / Google Dorks**
+Google Dorking (Google Hacking) is a technique where you use advanced search operators in Google to find sensitive or hidden information that is publicly indexed.
+
+👉 Professionals use it in passive reconnaissance (OSINT) to discover:
+
+Exposed files (PDFs, configs, backups)
+Login pages
+Admin panels
+Sensitive directories
+Public credentials (misconfigured systems)
+
+
+🧠 Core Google Dorking Operators (Must Know)
+1. Basic Operators
+site:example.com    → Search only inside a domain
+inurl:admin         → URL contains "admin"
+intitle:"index of"  → Directory listing pages
+filetype:pdf        → Specific file types
+cache:              → View cached version
+
+🔥 Most Powerful Google Dorks (Used by Professionals)
+📂 Find Open Directories
+intitle:"index of"
+intitle:"index of" "backup"
+intitle:"index of" "parent directory"
+
+👉 Finds exposed folders like:
+
+backups
+logs
+uploads
+
+🔑 Find Login Pages / Admin Panels
+inurl:admin
+inurl:login
+intitle:"admin panel"
+site:example.com inurl:admin
+
+📄 Find Sensitive Files
+filetype:env DB_PASSWORD
+filetype:log "error"
+filetype:sql "dump"
+filetype:txt "username" "password"
+
+🗄️ Find Configuration Files
+filetype:xml "config"
+filetype:json "api_key"
+filetype:ini "password"
+
+🌐 Find Subdomains
+site:*.example.com
+
+📷 Find Cameras / IoT Devices (Shodan-style via Google)
+inurl:view.shtml
+intitle:"Live View / - AXIS"
+
+💳 Find Exposed Credentials (⚠️ Ethical Use Only)
+"username" "password" filetype:xls
+"login" "password" filetype:csv
+
+
+
