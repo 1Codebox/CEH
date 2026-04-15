@@ -1,0 +1,147 @@
+WHOIS LOOKUP
+Find domain owner, registrar, contact email, address and registration dates.
+eg, whois example.com
+
+
+🌐 What is DNS?
+
+DNS (Domain Name System) converts:
+👉 example.com → 192.168.1.1 (IP address)
+
+Think of it like:
+📖 “Internet phonebook”
+
+🔍 Important DNS Records (Must Know)
+A Record → Domain → IPv4 address
+AAAA Record → Domain → IPv6
+MX Record → Mail servers
+NS Record → Name servers
+CNAME → Alias domain
+TXT → Extra info (SPF, verification, etc.)
+
+...........................................................
+WHOIS & DNS = passive recon (safe)
+Zone transfer attempts = can be flagged
+...........................................................
+
+🧠 Complete Recon Workflow (WHOIS + DNS)
+
+This is exactly how professionals do passive recon 👇
+
+🟢 Step 1 — WHOIS Lookup
+Tools:
+whois example.com
+Whois
+Online tools (ICANN WHOIS)
+What to look for:
+Registrar (e.g., ICANN regulated)
+Creation date → old domains = more trust
+Expiry date → possible takeover risk
+Name servers → move to DNS step
+
+🟢 Step 2 — Extract Name Servers
+
+Example output:
+
+ns1.cloudflare.com
+ns2.cloudflare.com
+
+👉 This tells you:
+
+Hosting provider (e.g., Cloudflare)
+
+🟢 Step 3 — DNS Enumeration
+Tools:
+nslookup
+dig
+dnsrecon
+Amass
+
+🔍 Basic Commands
+1. Get IP Address
+nslookup example.com
+
+2. Get All Records
+dig example.com ANY
+
+3. Get Mail Servers
+dig example.com MX
+
+🟢 Step 4 — Subdomain Enumeration
+
+👉 Goal: Find hidden assets
+
+Tools:
+Subfinder
+Amass
+
+Example:
+
+dev.example.com
+admin.example.com
+api.example.com
+
+🟢 Step 5 — Reverse DNS Lookup
+
+👉 Find domains hosted on same IP
+
+Command:
+dig -x <IP>
+
+🟢 Step 6 — Zone Transfer (Advanced)
+
+👉 Check if DNS server is misconfigured
+
+dig axfr @ns1.example.com example.com
+
+⚠️ If it works → FULL domain exposure (rare but critical)
+
+🟢 Step 7 — Analyze TXT Records
+dig example.com TXT
+
+👉 Look for:
+
+SPF records
+API keys (sometimes leaked)
+Verification tokens
+
+
+🔄 Real-World Workflow Summary
+1. WHOIS lookup
+   ↓
+2. Extract name servers
+   ↓
+3. DNS queries (A, MX, NS, TXT)
+   ↓
+4. Subdomain enumeration
+   ↓
+5. Reverse DNS
+   ↓
+6. Zone transfer check
+   ↓
+7. Analyze results
+🧩 Example (Real Scenario)
+
+Target: company.com
+
+WHOIS → Found registrar + NS
+DNS → Found IP: 192.168.x.x
+Subdomains → Found:
+admin.company.com
+dev.company.com
+MX → Found mail server
+TXT → Found SPF misconfiguration
+
+👉 Now you have:
+
+Attack surface
+Entry points
+----------------------------------------------
+
+Combine with:
+Shodan
+Nmap
+Use multiple tools (each finds different data)
+Automate using scripts (Python + APIs)
+
+hackertarget.com have tools for recon
