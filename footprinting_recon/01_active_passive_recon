@@ -7,7 +7,7 @@ You stay “invisible” — the target doesn’t know you’re gathering data.
 
 -----------------------------------------------------------------------------------
 
-**Tools used in passive recon**
+**Tools used in passive Reconnaissance**
 
 🧠 OSINT & Intelligence Gathering
 Shodan → “Google for hackers” (find exposed devices, ports, services)
@@ -61,4 +61,88 @@ Burp Suite (active scan) → Web app recon & testing
 Fierce → DNS enumeration (can be active)
 
 -----------------------------------------------------------------------------------
+
+shodan commands and use example:
+
+🔎 Basic Search Queries
+
+These are simple keywords you can type directly:
+
+apache → Finds servers running Apache
+nginx → Nginx web servers
+webcam → Publicly exposed cameras
+ftp → FTP servers
+
+🎯 Common Filters (Core Power of Shodan)
+🌍 Targeting Hosts
+ip:192.168.1.1 → Specific IP
+net:192.168.0.0/16 → CIDR range
+hostname:example.com → Domain
+
+🌐 Services & Ports
+port:22 → SSH
+port:3389 → RDP
+port:21 → FTP
+
+🖥️ OS & Software
+os:windows
+product:Apache
+version:2.4.49
+
+📍 Location-Based
+country:eg → .....
+city:....
+
+🏢 Organization / ISP
+org:name
+isp:name
+
+LIVE:
+site:gov.in intext:"password"
+filetype:xls inurl:"email"
+intitle:"index of" "backup"
+intitle:"index of" identity card
+
+⚡ Popular “Dork”-Style Queries
+
+These combine filters to find interesting/exposed systems:
+
+port:23 "login" → Telnet login prompts
+port:3306 mysql → MySQL databases
+port:6379 redis → Redis instances (often unsecured)
+port:9200 elasticsearch → Elasticsearch servers
+port:27017 mongodb → MongoDB databases
+
+📷 IoT / Camera Searches
+webcamXP
+product:Hikvision
+title:"IP Camera"
+
+🔐 Security / Vulnerability Hunting
+ssl.cert.subject.cn:example.com
+http.title:"Index of /" → Open directories
+http.html:"password"
+vuln:CVE-2021-44228 → Log4Shell
+
+🧠 Advanced Filters
+has_screenshot:true → Devices with screenshots
+http.status:200 → Only successful HTTP responses
+before:2024-01-01 / after:2023-01-01 → Time filtering
+
+💻 CLI (Command Line Interface)
+
+If you're using the Shodan CLI:
+
+Install
+pip install shodan
+Init
+shodan init YOUR_API_KEY
+Search
+shodan search apache
+Get Host Info
+shodan host 8.8.8.8
+Download Results
+shodan download results apache
+
+----------------------------------------------------------------------------------------
 
