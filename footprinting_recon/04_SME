@@ -1,0 +1,98 @@
+🕵️‍♂️ Social Media Enumeration (SME)
+
+Social Media Enumeration is the process of collecting information about a target from social platforms during passive reconnaissance (OSINT).
+
+👉 Professionals use it to gather:
+Emails & usernames
+Personal details (job, location)
+Company structure
+Technologies used
+Potential attack vectors (phishing, social engineering)
+-------------------------------------
+
+🔍 What Can You Find?
+
+👤 Individual Targets
+Full name, aliases
+Email addresses
+Phone numbers (sometimes exposed)
+Photos (metadata clues)
+Friends / connections
+
+🏢 Company Targets
+Employee list
+Tech stack hints
+Internal tools (from posts)
+Office locations
+Hiring patterns (very useful!)
+-----------------------------------------
+
+🌐 Top Platforms for Social Media Recon
+LinkedIn → Employees, roles, org structure
+Twitter → Real-time updates, opinions, leaks
+Facebook → Personal data, relationships
+Instagram → Images, locations, habits
+GitHub → Developer emails, repos, secrets
+
+---------------------------------------------
+
+🛠️ Top Tools for Social Media Enumeration
+🔹 1. Sherlock -> Finds usernames across 300+ platforms -> python3 sherlock username
+🔹 2. Maigret -> Advanced alternative to Sherlock, Detects account existence + metadata
+🔹 3. theHarvester -> Collects: Emails, Domains, Social profiles
+🔹 4. Social-Analyzer -> Fast username enumeration, Supports many platforms
+🔹 5. SpiderFoot -> Fully automated recon, Finds social accounts + leaks
+🔹 6. Twint -> Scrapes tweets without API, Finds: Mentions, Hashtags, Emails
+🔹 7. Holehe -> Checks where an email is registered, 👉 Great for account discovery
+🔹 8. hunter.io -> extract emails from domain
+🔹 9. namechk.com -> check username availability
+---------------------------------------------
+
+🔎 Google Dorking for Social Media
+🎯 Find Profiles
+site:linkedin.com "company name" employees
+site:twitter.com "target name"
+
+🎯 Find Emails
+"@company.com" site:linkedin.com
+
+🎯 Find GitHub Accounts
+site:github.com "target name"
+
+---------------------------------------------
+
+🧠 Professional Workflow (Real-World)
+🟢 Step 1 — Start with Name / Username
+Try same username everywhere
+Use Sherlock
+
+🟢 Step 2 — Expand via Email
+Use Holehe
+👉 Find linked platforms
+
+🟢 Step 3 — Analyze Profiles
+
+Look for:
+
+Bio info
+Links
+Company mentions
+Photos (locations, badges)
+
+🟢 Step 4 — Map Connections
+Friends
+Followers
+Employees
+
+👉 Especially powerful on LinkedIn
+
+🟢 Step 5 — Cross-Platform Correlation
+
+Example:
+
+Same username on GitHub + Twitter
+Email reused across platforms
+
+🟢 Step 6 — Extract Intelligence
+Build profile of target
+Identify weak points (for pentesting scenarios)
