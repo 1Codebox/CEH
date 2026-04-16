@@ -1,0 +1,228 @@
+
+# 🧠 Full Web Recon Checklist (Pentester Workflow)
+
+## 🟢 Phase 1: Scoping & Target Definition
+
+Before touching tools:
+
+* Identify:
+
+  * Main domain (e.g. example.com)
+  * Allowed assets (bug bounty scope)
+* Note:
+
+  * Out-of-scope domains
+  * Testing restrictions (no DoS, etc.)
+
+👉 Skipping this step is how people get banned from bug bounty programs.
+
+---
+
+## 🌐 Phase 2: Passive Recon (Zero Interaction)
+
+### 🔎 Domain & Subdomain Discovery
+
+Use:
+
+* Amass
+* Sublist3r
+* theHarvester
+
+✔ Checklist:
+
+* Collect all subdomains
+* Identify IPs tied to domains
+* Look for:
+
+  * dev.example.com
+  * staging.example.com
+  * admin panels
+
+---
+
+### 🛰️ Asset Discovery (External View)
+
+Use:
+
+* Shodan
+* Censys
+
+✔ Checklist:
+
+* Open ports exposed publicly
+* Misconfigured services
+* Old servers still online
+
+---
+
+### 👤 OSINT (People & Leaks)
+
+Use:
+
+* SpiderFoot
+* Have I Been Pwned
+
+✔ Checklist:
+
+* Employee emails
+* Leaked credentials
+* GitHub repos / exposed keys
+
+---
+
+## 🟡 Phase 3: Active Recon (Careful Interaction)
+
+### 🔍 Port & Service Scanning
+
+Use:
+
+* Nmap
+
+✔ Checklist:
+
+* Open ports (80, 443, 8080, 22, etc.)
+* Service versions
+* OS detection
+
+---
+
+### 🌍 Web Technology Fingerprinting
+
+Use:
+
+* Wappalyzer
+* WhatWeb
+
+✔ Checklist:
+
+* CMS (WordPress, Joomla, etc.)
+* Frameworks (React, Angular)
+* Server type (Apache, Nginx)
+
+---
+
+### 📂 Directory & Endpoint Discovery
+
+Use:
+
+* Gobuster
+* Dirb
+
+✔ Checklist:
+
+* Hidden directories (/admin, /backup, /test)
+* API endpoints (/api/v1/)
+* Old versions (/v1/, /old/)
+
+---
+
+## 🔵 Phase 4: Deep Enumeration
+
+### 🔗 Parameter Discovery
+
+✔ Checklist:
+
+* URL parameters (?id=, ?user=)
+* Hidden GET/POST parameters
+* API inputs
+
+👉 Tip:
+
+* Look at JS files for endpoints and secrets
+
+---
+
+### 📜 JavaScript Analysis
+
+✔ Checklist:
+
+* Extract:
+
+  * API URLs
+  * Tokens
+  * Keys
+* Look for:
+
+  * Hardcoded credentials
+  * Hidden endpoints
+
+---
+
+### 🍪 Session & Auth Mapping
+
+Use:
+
+* Burp Suite
+
+✔ Checklist:
+
+* Cookies structure
+* Auth flow (login → dashboard)
+* JWT tokens
+
+---
+
+## 🔴 Phase 5: Vulnerability-Oriented Recon
+
+### 🧪 Web Server Weaknesses
+
+Use:
+
+* Nikto
+
+✔ Checklist:
+
+* Misconfigurations
+* Default files
+* Outdated software
+
+---
+
+### 🔐 Entry Point Mapping
+
+✔ Identify:
+
+* Login forms
+* Upload features
+* Search bars
+* APIs
+
+👉 These are your attack surfaces.
+
+---
+
+## ⚫ Phase 6: Organizing Findings (What pros do)
+
+✔ Build a map:
+
+* Domains → Subdomains
+* Subdomains → IPs
+* IPs → Services
+* Services → Endpoints
+
+Tools:
+
+* Maltego
+
+---
+
+## 🧩 Pro Tips (What separates beginners from pros)
+
+* Focus on **“interesting assets”**:
+
+  * dev / staging environments
+  * forgotten subdomains
+* Always check:
+
+  * JS files (goldmine 🔥)
+* Don’t rush scanning—**analyze results deeply**
+* Automate, but **think manually**
+
+---
+
+## ⚡ Simple Mental Model
+
+Think of recon like this:
+
+> **Discover → Expand → Analyze → Prioritize**
+
