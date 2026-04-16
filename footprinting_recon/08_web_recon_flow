@@ -1,0 +1,95 @@
+
+## 🌐 1. Passive Recon (No direct interaction with target)
+
+These are safest and often the starting point.
+
+* **Maltego** – Visual link analysis (domains, emails, social profiles).
+* **theHarvester** – Finds emails, subdomains, IPs.
+* **Recon-ng** – Modular OSINT framework (like Metasploit but for recon).
+* **Amass** – Subdomain enumeration + mapping.
+* **Shodan** – Finds exposed servers, IoT, ports.
+* **Censys** – Deep internet asset search.
+
+👉 Use these to map the “attack surface” without touching the system directly.
+
+---
+
+## 🔍 2. Domain & DNS Enumeration
+
+* **dnsenum**
+* **Fierce**
+* **Sublist3r**
+* **Knockpy**
+
+👉 Helps discover:
+
+* Subdomains
+* Name servers
+* IP ranges
+
+---
+
+## 🧠 3. Web Technology Fingerprinting
+
+* **Wappalyzer** – Detects CMS, frameworks, analytics.
+* **BuiltWith**
+* **WhatWeb**
+
+👉 Answers questions like:
+
+* Is it using WordPress?
+* Which server (Apache/Nginx)?
+* JS frameworks?
+
+---
+
+## 🧭 4. Active Recon (Direct interaction)
+
+* **Nmap** – Port scanning, service detection.
+* **Nikto** – Finds vulnerabilities/misconfigs.
+* **Dirb** / **Gobuster** – Finds hidden directories/files.
+* **Burp Suite** – Intercepts and analyzes HTTP traffic.
+
+⚠️ Only use active recon on systems you own or have permission to test.
+
+---
+
+## 🕵️ 5. OSINT & People Recon
+
+* **SpiderFoot**
+* **Sherlock**
+* **Have I Been Pwned**
+
+👉 Finds:
+
+* Leaked credentials
+* Social media presence
+* Employee info
+
+---
+
+## ☁️ 6. Cloud & Infrastructure Recon
+
+* **CloudEnum**
+* **S3Scanner**
+
+---
+
+## ⚙️ 7. All-in-One / Automation
+
+* **Osmedeus**
+* **Sn1per**
+
+---
+
+## 🧩 Typical Recon Workflow
+
+1. Start with passive recon (Amass, theHarvester)
+2. Enumerate domains/subdomains
+3. Fingerprint technologies (Wappalyzer)
+4. Scan ports/services (Nmap)
+5. Discover hidden content (Gobuster)
+6. Analyze vulnerabilities (Nikto, Burp Suite)
+
+---
+
