@@ -1,0 +1,89 @@
+
+**What is Network Scanning?**
+Network scanning is the process of identifying active devices, open ports, services and vulnerabilities on a network. It helps ehtical 
+hackers map the network and understand potential entry points for further testing and exploitaion.
+
+**Important to:**
+-> Helps in identifying the attack surface.
+-> Assists in security assesments and the audits
+-> Critical for penetration testing and defense strategy
+
+**What is Port Scanning?**
+Port Scanningis used to discover open, closed or filtered ports on a target system. Is also helps to determine what services 
+are running behind those ports.
+
+**Common Port Scan Goals:**
+Discover Open ports(e.g; 21-ftp, 22-ssh, 80-http)
+Identify services running (e.g; Apache, MySQL)
+Detect firewall and filtering rules
+
+**Tools Used:**
+NMAP(all in one scanner), NETCAT, MASSCAN, Angry IP Scanner, ARP Scan, fping(fast ping sweep), 
+tcpdump(sniff network packets), subnetcalc(calculate subnet mask)
+-------------------------------------------------
+
+Real-Worl Analogy:
+Port Scanning is like walking through a hotel corridor and checking which doors are unlocked 
+means you're not entering, just gently checking the handle
+
+-----------------------------------------------------------------------------------------------
+
+Vulnerability Scanning:
+This lock is just for show, it opens with a slight push!
+
+Tools:
+Nessus
+OpenVAS
+Basic Web Tool:
+nikto -h https://target.com
+
+--------------------------------
+ICMP - knock knock, who's there?
+ICMP = internet doorbell
+Ping = is the host alive?
+traceroute = which path did the packet take?
+
+ICMP Type 8 = echo request
+ICMP Type 0 = echo reply
+ICMP Type 3 = destination unreachable
+----------------------------------------------------------------------------------
+basic nmap scans:
+Simple Scan: nmap 192.168.1.1 - Scans top 1000 ports.
+Ping Scan (Host Discovery): nmap -sn 192.168.1.0/24 - Lists active hosts without port scanning.
+Subnet/Range Scan: nmap 192.168.1.0/24 or nmap 192.168.1.1-20.
+Fast Scan: nmap -F 192.168.1.1 - Scans fewer ports for speed.
+Service Version Detection: nmap -sV <ip> - Determines service/version info.
+OS Detection: nmap -O <ip> - Identifies the operating system.
+Comprehensive Scan: nmap -A <ip> - OS detection, version detection, script scanning, and traceroute.
+nsloop <ip> -oN scan.txt    //save output 
+
+Exclude IPs: nmap 192.168.1.0/24 --exclude 192.168.1.1.
+
+------------------------------------------------------------------------
+nmap port scanning:
+Scan All 65,535 Ports: nmap -p- <target>
+Scan Specific Ports: nmap -p 80,443,8080 <target>
+
+------------------------------------------------------------------------
+
+Common Verbose Options & Usage:
+Basic Verbose: nmap -v <target> (Shows progress, host discovery, and open ports as found).
+Double Verbose: nmap -vv <target> (More detailed information, including DNS and scan completion times).
+Verbose + OS Detection: nmap -v -O <target> (Provides details on OS fingerprinting).
+Verbose + Version Detection: nmap -v -sV <target> (Shows version detection progress). 
+Information Security Stack Exchange
+Information Security Stack Exchange
+ +4
+Key Benefits of -v:
+Real-time Feedback: Shows scan completion time estimates.
+Faster Insight: Displays open ports as they are found, rather than waiting for the end of the scan.
+Troubleshooting: Essential for diagnosing network issues or unexpected scan results.
+Interactive Control: During a scan, you can press v or V to increase or decrease verbosity.
+
+
+
+
+
+
+
+
