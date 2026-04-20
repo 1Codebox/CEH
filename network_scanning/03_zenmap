@@ -1,0 +1,255 @@
+
+# 🔍 Zenmap Complete Guide (Nmap GUI)
+
+## 📌 Introduction
+
+**Zenmap** is the official graphical user interface (GUI) for **Nmap**, one of the most powerful network scanning tools used in cybersecurity.
+
+While Nmap is command-line based, Zenmap provides a **visual and beginner-friendly way** to perform the same scans, making it ideal for:
+
+* Beginners in cybersecurity
+* Students learning networking
+* Professionals who want quick visualization
+
+---
+
+## 🎯 Key Features
+
+Zenmap is not just a GUI — it adds real usability advantages:
+
+### 🔹 1. Predefined Scan Profiles
+
+Zenmap includes built-in scan types like:
+
+* Intense Scan
+* Quick Scan
+* Ping Scan
+* Regular Scan
+
+👉 These profiles automatically generate Nmap commands.
+
+---
+
+### 🔹 2. Command Builder
+
+* As you select options, Zenmap **generates the exact Nmap command**
+* Helps you **learn Nmap syntax automatically**
+
+---
+
+### 🔹 3. Interactive Topology Map
+
+* Displays a **network map**
+* Shows how hosts are connected
+
+---
+
+### 🔹 4. Scan Comparison
+
+* Compare multiple scans
+* Identify changes in network/services over time
+
+---
+
+### 🔹 5. Results Visualization
+
+Results are shown in organized tabs:
+
+* **Nmap Output** (raw output)
+* **Ports/Hosts** (structured view)
+* **Topology** (graph view)
+* **Host Details**
+
+---
+
+## ⚙️ Installation
+
+### 🐧 Linux (Kali Linux / Ubuntu)
+
+Zenmap is sometimes not pre-installed in newer Kali versions.
+
+```bash
+sudo apt update
+sudo apt install zenmap
+```
+
+> ⚠️ If not available, install Nmap and use CLI or install Zenmap manually from older packages.
+
+---
+
+### 🪟 Windows
+
+1. Go to official Nmap website
+2. Download installer
+3. Zenmap is included with Nmap
+
+---
+
+### 🍎 macOS
+
+```bash
+brew install nmap
+```
+
+Zenmap may require manual installation.
+
+---
+
+## 🚀 How to Use Zenmap
+
+### Step 1: Launch Zenmap
+
+```bash
+zenmap
+```
+
+---
+
+### Step 2: Enter Target
+
+Examples:
+
+* `192.168.1.1` (single host)
+* `192.168.1.0/24` (subnet)
+* `scanme.nmap.org` (domain)
+
+---
+
+### Step 3: Choose Scan Profile
+
+Example:
+
+* **Intense Scan**
+
+Automatically runs:
+
+```bash
+nmap -T4 -A -v <target>
+```
+
+---
+
+### Step 4: Run Scan
+
+Click **Scan** button → results appear in tabs.
+
+---
+
+## 🔥 Common Scan Profiles Explained
+
+### 🔹 Intense Scan
+
+* Aggressive scan (`-A`)
+* OS detection, version detection, scripts
+
+---
+
+### 🔹 Quick Scan
+
+* Fast scan of common ports
+
+---
+
+### 🔹 Ping Scan
+
+* Only checks if hosts are alive
+
+---
+
+### 🔹 Regular Scan
+
+* Basic default scan
+
+---
+
+## 📊 Understanding Output
+
+### Example Output Sections:
+
+#### 🔸 Open Ports
+
+```
+22/tcp  open  ssh
+80/tcp  open  http
+```
+
+#### 🔸 Service Versions
+
+```
+Apache httpd 2.4.41
+OpenSSH 7.6
+```
+
+#### 🔸 OS Detection
+
+```
+Linux 3.x
+```
+
+---
+
+## 🧪 Practical Use Case (Lab)
+
+In a lab setup:
+
+* Attacker: Kali Linux
+* Target: Metasploitable
+
+### Workflow:
+
+1. Run Zenmap Intense Scan
+2. Identify open ports (e.g., 21, 80, 3306)
+3. Check services and versions
+4. Use findings for exploitation (e.g., Metasploit)
+
+---
+
+## ⚠️ Legal & Ethical Considerations
+
+* Only scan systems you **own or have permission to test**
+* Unauthorized scanning may be illegal
+* Always follow ethical hacking guidelines
+
+---
+
+## 👍 Advantages of Zenmap
+
+* Beginner-friendly
+* Visual representation
+* Saves scan history
+* Helps learn Nmap commands
+
+---
+
+## 👎 Limitations
+
+* Slower than CLI for advanced users
+* Limited flexibility compared to raw Nmap
+* Not always updated in latest Linux distros
+
+---
+
+## 🧠 Pro Tips
+
+* Start with Zenmap → move to Nmap CLI
+* Use Zenmap to **learn commands visually**
+* Save scan results for reporting
+* Combine with tools like:
+
+  * Wireshark
+  * Metasploit
+
+---
+
+## 📌 Conclusion
+
+Zenmap is an excellent tool for beginners and intermediate users who want to:
+
+* Learn Nmap easily
+* Visualize network scans
+* Perform quick assessments
+
+However, for advanced penetration testing, mastering **Nmap CLI** is essential.
+
+---
+
