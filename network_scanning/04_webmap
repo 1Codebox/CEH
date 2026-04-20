@@ -1,0 +1,228 @@
+
+# 🌐 WebMap Complete Guide (Nmap Web Dashboard)
+
+## 📌 Introduction
+
+**WebMap** is a web-based tool that helps you **visualize and manage Nmap scan results** through a clean browser interface.
+
+It works alongside **Nmap**, allowing you to:
+
+* Upload scan results
+* View data in dashboards
+* Analyze hosts, ports, and services visually
+
+👉 Think of WebMap as:
+**Nmap + Dashboard + Reporting Tool**
+
+---
+
+## 🎯 Key Features
+
+### 🔹 1. Web-Based Dashboard
+
+* Access scans from your browser
+* Clean UI for analysis
+
+---
+
+### 🔹 2. Upload & Manage Scans
+
+* Import Nmap XML results
+* Organize multiple scans
+
+---
+
+### 🔹 3. Visual Data Representation
+
+* Hosts overview
+* Open ports summary
+* Service breakdown
+
+---
+
+### 🔹 4. Search & Filter
+
+* Quickly find:
+
+  * Specific ports
+  * Services
+  * Hosts
+
+---
+
+### 🔹 5. Multi-User Support
+
+* Useful for teams
+* Share scan results easily
+
+---
+
+## ⚙️ Installation (Docker Recommended)
+
+WebMap is usually run using Docker.
+
+### 🐳 Install Docker
+
+```bash
+sudo apt update
+sudo apt install docker.io
+```
+
+---
+
+### 🚀 Run WebMap Container
+
+```bash
+docker run -d \
+  -p 8000:8000 \
+  -v /your/nmap/results:/opt/xml \
+  reborntc/webmap
+```
+
+---
+
+### 🌐 Access WebMap
+
+Open browser:
+
+```
+http://localhost:8000
+```
+
+---
+
+## 🔑 Default Login
+
+* **Username:** admin
+* **Password:** admin
+
+> ⚠️ Change credentials after first login.
+
+---
+
+## 🧪 How to Use WebMap
+
+### Step 1: Generate Nmap Scan
+
+```bash
+nmap -A -oX scan.xml <target>
+```
+
+👉 `-oX` saves output in XML format (required for WebMap)
+
+---
+
+### Step 2: Upload Scan
+
+* Open WebMap dashboard
+* Upload `scan.xml` file
+
+---
+
+### Step 3: Analyze Results
+
+You can now view:
+
+* 📡 Hosts discovered
+* 🔓 Open ports
+* ⚙️ Services running
+* 🖥️ OS detection
+
+---
+
+## 📊 Example Use Case (Lab Setup)
+
+### 🧪 Environment:
+
+* Kali Linux (Attacker)
+* Metasploitable (Target)
+
+### Workflow:
+
+1. Run Nmap scan:
+
+```bash
+nmap -A -oX metasploitable.xml 192.168.56.101
+```
+
+2. Upload to WebMap
+
+3. Analyze:
+
+* Port 21 → FTP
+* Port 80 → Web server
+* Port 3306 → MySQL
+
+4. Use results for exploitation (Metasploit)
+
+---
+
+## 🔥 Why Use WebMap?
+
+| Feature            | Benefit               |
+| ------------------ | --------------------- |
+| Visualization      | Easier analysis       |
+| Centralized data   | Manage multiple scans |
+| Team collaboration | Share results         |
+| Reporting          | Better documentation  |
+
+---
+
+## 👍 Advantages
+
+* Easy to use
+* Clean interface
+* Great for reporting
+* Works well with labs
+
+---
+
+## 👎 Limitations
+
+* Requires Docker setup
+* Not as powerful as CLI analysis
+* Needs XML input only
+
+---
+
+## ⚠️ Security & Legal Notice
+
+* Only scan authorized systems
+* Do not upload sensitive scans to shared environments
+* Always follow ethical hacking practices
+
+---
+
+## 🧠 Pro Tips
+
+* Always use:
+
+```bash
+nmap -oX scan.xml <target>
+```
+
+* Combine WebMap with:
+
+  * Metasploit
+  * Burp Suite
+  * Wireshark
+
+* Use WebMap for:
+
+  * Internship reports
+  * Client presentations
+  * Lab documentation
+
+---
+
+## 📌 Conclusion
+
+WebMap is a powerful companion tool for Nmap that transforms raw scan data into **visual, easy-to-understand insights**.
+
+It is especially useful for:
+
+* Beginners learning scanning
+* Cybersecurity students
+* Professionals creating reports
+
+---------------------------------------------
