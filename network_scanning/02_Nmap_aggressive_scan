@@ -1,0 +1,67 @@
+Basic Aggressive Scan Command
+nmap -A <target>
+
+What -A Actually Does
+
+When you run -A, Nmap enables:
+
+-> OS Detection → tries to guess the operating system
+-> Version Detection → finds service versions running on ports
+-> Script Scanning (NSE) → runs default scripts for vulnerabilities/info
+-> Traceroute → maps the network path
+
+So instead of doing this:
+
+nmap -O -sV -sC --traceroute <target>
+
+You just run:
+
+nmap -A <target>
+
+Example
+nmap -A 192.168.1.10
+
+Output may include:
+
+Open ports (e.g., 80, 22, 443)
+Service versions (Apache, OpenSSH)
+OS guess (Linux, Windows)
+Script results (e.g., weak configs, banners)
+----------------------------------------------------------
+
+Useful Aggressive Scan Variations
+
+1. Aggressive + Faster Timing
+nmap -A -T4 <target>
+-T4 = faster scan (good for labs like Metasploitable)
+
+2. Aggressive + Specific Ports
+nmap -A -p 1-1000 <target>
+
+3. Aggressive + Output File
+nmap -A -oN scan.txt <target>
+
+4. Aggressive + No Ping (for firewalled hosts)
+nmap -A -Pn <target>
+
+
+⚠️ Important Warnings
+Very noisy → easy to detect by IDS/IPS
+Not stealthy → don’t use on real targets without permission
+Can be slow → especially on large networks
+---------------------------------------------------------------
+
+When to Use -A
+
+Use it when:
+
+You want quick full info
+You don’t care about being detected
+
+Avoid it when:
+
+Doing stealth recon
+Target has WAF/IDS
+----------------------------------------------------
+
+
