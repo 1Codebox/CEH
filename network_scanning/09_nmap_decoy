@@ -1,0 +1,186 @@
+## 🕵️ Nmap Decoy Technique (IP Spoofing for Stealth)
+
+The **decoy technique** in Nmap is used to **hide your real IP address among multiple fake (decoy) IPs** while scanning a target. It’s a classic evasion method to make it harder for defenders to identify the true source of a scan.
+
+---
+
+# 🧠 Core Idea
+
+Instead of sending packets from just your IP:
+
+👉 Nmap sends **multiple packets** that appear to come from:
+
+* Your real IP (attacker)
+* Several **decoy IP addresses**
+
+So the target sees **many sources scanning it simultaneously**, creating confusion.
+
+---
+
+# ⚙️ How It Works
+
+### Command:
+
+```bash
+nmap -D <decoy1,decoy2,ME,decoy3> target.com
+```
+
+### Example:
+
+```bash
+nmap -sS -D 192.168.1.5,10.0.0.8,ME,172.16.1.10 target.com
+```
+
+* `ME` = your real IP
+* Others = fake/decoy IPs
+
+---
+
+# 📡 What the Target Sees
+
+From the defender’s perspective:
+
+* Multiple IPs are scanning the system
+* All appear equally suspicious
+* Hard to determine which one is real
+
+---
+
+# 🎯 Why Use Decoy Scanning?
+
+## 1. Anonymity
+
+Your real IP is hidden among decoys.
+
+---
+
+## 2. IDS/Log Confusion
+
+Systems like Snort:
+
+* Log multiple IPs
+* Make attribution harder
+
+---
+
+## 3. Evasion
+
+Some defensive systems:
+
+* Trigger alerts based on scan thresholds per IP
+* Decoys distribute traffic → reduce detection likelihood
+
+---
+
+# 🧪 Types of Decoy Usage
+
+## 1. Manual Decoys
+
+```bash
+nmap -D 1.1.1.1,2.2.2.2,ME,3.3.3.3 target.com
+```
+
+---
+
+## 2. Random Decoys
+
+```bash
+nmap -D RND:5 target.com
+```
+
+* Generates 5 random fake IPs
+
+---
+
+## 3. Mixed
+
+```bash
+nmap -D RND:3,ME,RND:2 target.com
+```
+
+---
+
+# ⚠️ Important Behavior
+
+* Decoy packets are sent **in parallel**
+* Only **your real IP receives responses**
+* Decoys are just for **appearance**, not actual communication
+
+---
+
+# 🛡️ Detection & Limitations
+
+## 1. Modern IDS Can Still Detect You
+
+Advanced systems can:
+
+* Analyze timing patterns
+* Identify the real IP based on response behavior
+
+---
+
+## 2. Routing Issues
+
+* Fake IPs must be **valid and routable**
+* Otherwise packets may be dropped
+
+---
+
+## 3. ISP Filtering
+
+* Some networks block spoofed packets
+* Decoy technique may fail completely
+
+---
+
+## 4. Not Fully Anonymous
+
+* It’s **obfuscation**, not true anonymity
+
+---
+
+# 🚫 Common Mistakes
+
+* Using private/non-routable IPs (e.g., 192.168.x.x) as decoys on the internet
+* Assuming decoys = complete invisibility
+* Overusing decoys → slows scan significantly
+
+---
+
+# 🛠️ Combine with Other Techniques
+
+## 1. With SYN scan
+
+```bash
+nmap -sS -D RND:5 target.com
+```
+
+---
+
+## 2. With fragmentation
+
+```bash
+nmap -sS -f -D RND:5 target.com
+```
+
+---
+
+## 3. With slow timing
+
+```bash
+nmap -sS -T1 -D RND:5 target.com
+```
+
+---
+
+# 🧠 Key Takeaways
+
+* Decoy scanning = **IP camouflage**
+* Uses multiple fake sources to confuse detection
+* Useful for:
+
+  * Red teaming
+  * IDS testing
+* Not foolproof against modern defenses
+
+---
