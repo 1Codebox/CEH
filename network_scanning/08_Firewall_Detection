@@ -1,0 +1,258 @@
+
+## 🔥 Nmap – Firewall Detection (ACK Probing)
+
+**ACK probing** in Nmap is a technique used to **map firewall rules** rather than to directly find open ports. It relies on sending TCP packets with the **ACK flag set** and observing how the target responds.
+
+---
+
+# 🧠 Core Idea
+
+Unlike SYN scans, ACK scans **don’t try to initiate a connection**.
+Instead, they test whether a firewall is:
+
+* **Stateful (tracking connections)**
+* **Stateless (just filtering packets blindly)**
+
+This behavior is grounded in how TCP works per RFC 793.
+
+---
+
+# ⚙️ How ACK Scanning Works
+
+### Command:
+
+```bash
+nmap -sA target.com
+```
+
+### What Nmap sends:
+
+* TCP packet with **ACK flag set**
+
+### Expected responses:
+
+| Response                           | Meaning                                      |
+| ---------------------------------- | -------------------------------------------- |
+| **RST (Reset)**                    | Port is **unfiltered** (packet reached host) |
+| **No response / ICMP unreachable** | Port is **filtered** (blocked by firewall)   |
+
+---
+
+# 🔍 Important: What ACK Scan DOES NOT Do
+
+ACK scan:
+
+* ❌ Does **not** determine if a port is open or closed
+* ✅ Only tells whether a port is **filtered or unfiltered**
+
+---
+
+# 📊 Output Example
+
+```bash
+nmap -sA --reason 192.168.1.1
+```
+
+Output:
+
+```
+PORT   STATE      REASON
+22/tcp unfiltered rst
+80/tcp filtered   no-response
+```
+
+### Interpretation:
+
+* **Port 22 → unfiltered** → firewall allowed packet through
+* **Port 80 → filtered** → firewall blocked it
+
+---
+
+# 🎯 Why ACK Probing Is Useful
+
+## 1. Firewall Rule Mapping
+
+Helps identify:
+
+* Which ports are blocked
+* Which ports are allowed through the firewall
+
+---
+
+## 2. Detect Stateful vs Stateless Firewalls
+
+### 🔹 Stateless firewall:
+
+* Allows ACK packets through
+* Returns RST → **unfiltered**
+
+### 🔹 Stateful firewall:
+
+* Drops unexpected ACK packets (no session exists)
+* Result → **filtered**
+
+---
+
+## 3. Pre-Scan Reconnaissance
+
+Before running aggressive scans:
+
+* Use ACK scan to understand filtering behavior
+* Then choose better scan strategy (SYN, FIN, etc.)
+
+---
+
+## 4. IDS/Firewall Testing
+
+Useful in penetration testing to:
+
+* Identify weak filtering rules
+* Check if firewall properly validates TCP state
+
+---
+
+# 🧪 Practical Workflow
+
+### Step 1: Run ACK scan
+
+```bash
+nmap -sA target.com
+```
+
+### Step 2: Compare with SYN scan
+
+```bash
+nmap -sS target.com
+```
+
+### Step 3: Analyze differences
+
+* If SYN shows “filtered” but ACK shows “unfiltered”
+  → firewall allows ACK but blocks SYN (misconfiguration)
+
+---
+
+# 🛠️ Advanced Techniques
+
+## 1. Combine with `--reason`
+
+```bash
+nmap -sA --reason target.com
+```
+
+---
+
+## 2. Fragment packets (evasion)
+
+```bash
+nmap -sA -f target.com
+```
+
+---
+
+## 3. Use decoys
+
+```bash
+nmap -sA -D RND:5 target.com
+```
+
+---
+
+## 4. Adjust timing
+
+```bash
+nmap -sA -T2 target.com
+```
+
+---
+
+## 5. Specify ports
+
+```bash
+nmap -sA -p 1-1000 target.com
+```
+
+---
+
+# 🛡️ Detection by IDS / Firewalls
+
+### IDS Detection
+
+Systems like Snort can detect:
+
+* Unusual ACK packets without established sessions
+* Patterns of scanning behavior
+
+---
+
+### Firewall Behavior
+
+Modern firewalls:
+
+* Drop unsolicited ACK packets
+* Use **stateful inspection**
+* Log suspicious activity
+
+---
+
+# ⚠️ Limitations
+
+## 1. No Port State Info
+
+You only get:
+
+* `filtered`
+* `unfiltered`
+
+Not:
+
+* `open`
+* `closed`
+
+---
+
+## 2. Modern Firewalls Reduce Effectiveness
+
+Most modern systems:
+
+* Use stateful filtering
+* Drop ACK packets → many ports appear “filtered”
+
+---
+
+## 3. False Interpretations
+
+“Unfiltered” doesn’t mean:
+
+* Port is open
+* Service is running
+
+It only means:
+👉 *Firewall didn’t block the packet*
+
+---
+
+# 🧠 Key Concepts to Remember
+
+* ACK scan = **firewall analysis tool**, not port scanner
+* Uses **RST vs no-response** logic
+* Helps distinguish:
+
+  * Filtered vs unfiltered ports
+* Useful for:
+
+  * Firewall mapping
+  * Network reconnaissance
+  * Evasion strategy planning
+
+---
+
+# 🧩 Quick Comparison
+
+| Scan Type     | Purpose                 |
+| ------------- | ----------------------- |
+| SYN (`-sS`)   | Find open ports         |
+| FIN/NULL/Xmas | Stealth scanning        |
+| ACK (`-sA`)   | Firewall rule detection |
+
+---
