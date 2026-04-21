@@ -1,0 +1,219 @@
+Here’s a **carefully curated list of 50 widely used NSE scripts** from real-world security assessments using Nmap.
+
+These are grouped by category (like professionals actually use them), and include **what they do + when/why to use them**.
+
+> 📌 Note: Nmap has **600+ scripts available** ([CellStream, Inc.][1]), so mastering the *right ones* is more important than memorizing everything.
+
+---
+
+# 🔝 Top 50 NSE Scripts (Real Assessments)
+
+---
+
+# 🌐 1. Recon & Discovery Scripts
+
+These are used in the **early phase (information gathering)**.
+
+| Script                    | Purpose              | When to Use       |
+| ------------------------- | -------------------- | ----------------- |
+| `http-title`              | Get website title    | Identify web apps |
+| `http-headers`            | Extract headers      | Fingerprinting    |
+| `dns-brute`               | Subdomain discovery  | External recon    |
+| `dns-recursion`           | Check DNS recursion  | DNS misconfig     |
+| `snmp-info`               | SNMP system info     | Network devices   |
+| `snmp-sysdescr`           | OS via SNMP          | Internal scans    |
+| `nbstat`                  | NetBIOS info         | Windows enum      |
+| `smb-enum-shares`         | List SMB shares      | Internal pentest  |
+| `smb-os-discovery`        | OS detection via SMB | Windows targets   |
+| `broadcast-dhcp-discover` | Find DHCP servers    | Network mapping   |
+
+👉 These scripts fall under **discovery category** ([Nmap][2])
+
+---
+
+# 🔐 2. Authentication & Access Checks
+
+Used to find **weak or misconfigured access controls**.
+
+| Script              | Purpose                    |
+| ------------------- | -------------------------- |
+| `ftp-anon`          | Check anonymous FTP login  |
+| `ssh-auth-methods`  | List SSH auth methods      |
+| `http-auth`         | Detect HTTP authentication |
+| `imap-capabilities` | Mail server auth info      |
+| `pop3-capabilities` | POP3 features              |
+| `smtp-commands`     | SMTP capabilities          |
+| `oracle-enum-users` | Oracle usernames           |
+| `mysql-info`        | MySQL server info          |
+
+👉 Helps identify **weak entry points**
+
+---
+
+# 🔑 3. Brute Force Scripts (Authorized Use Only)
+
+Used in controlled environments to test password strength.
+
+| Script         | Purpose                |
+| -------------- | ---------------------- |
+| `ssh-brute`    | SSH password guessing  |
+| `ftp-brute`    | FTP brute force        |
+| `http-brute`   | Web login brute force  |
+| `telnet-brute` | Telnet credentials     |
+| `snmp-brute`   | SNMP community strings |
+| `mysql-brute`  | MySQL credentials      |
+| `rdp-brute`    | RDP login testing      |
+
+👉 These belong to **brute category** ([Nmap][2])
+
+---
+
+# 🧪 4. Vulnerability Detection Scripts (Most Important)
+
+These are heavily used in **real pentests and audits**.
+
+| Script                   | Purpose                  |
+| ------------------------ | ------------------------ |
+| `vuln`                   | Run multiple vuln checks |
+| `vulners`                | CVE lookup via API       |
+| `http-vuln-cve2017-5638` | Apache Struts vuln       |
+| `http-shellshock`        | Shellshock vuln          |
+| `smb-vuln-ms17-010`      | EternalBlue              |
+| `smb-vuln-ms08-067`      | Windows RCE              |
+| `ssl-heartbleed`         | OpenSSL Heartbleed       |
+| `ssl-poodle`             | SSL POODLE attack        |
+| `http-sql-injection`     | SQLi detection           |
+| `http-xssed`             | XSS detection            |
+
+👉 Used in **vuln category** ([Nmap][2])
+
+---
+
+# 🖥️ 5. Service Enumeration Scripts
+
+Deep inspection of running services.
+
+| Script                | Purpose               |
+| --------------------- | --------------------- |
+| `banner`              | Grab service banners  |
+| `http-enum`           | Web directories       |
+| `http-methods`        | Allowed HTTP methods  |
+| `http-robots.txt`     | Extract robots file   |
+| `ssl-cert`            | SSL certificate info  |
+| `ssl-enum-ciphers`    | Weak cipher detection |
+| `ssh-hostkey`         | SSH key fingerprint   |
+| `rdp-enum-encryption` | RDP security level    |
+
+---
+
+# 📡 6. Malware & Backdoor Detection
+
+Used in **incident response & threat hunting**.
+
+| Script                | Purpose               |
+| --------------------- | --------------------- |
+| `http-malware-host`   | Known malware hosts   |
+| `smtp-strangeport`    | Suspicious SMTP ports |
+| `irc-botnet-channels` | Botnet detection      |
+| `dns-blacklist`       | Blacklist check       |
+| `backorifice-info`    | Backdoor detection    |
+
+👉 Malware scripts detect compromised systems ([Nmap][2])
+
+---
+
+# 🌍 7. Network & Infrastructure Scripts
+
+Used for **internal network audits**
+
+| Script                             | Purpose                |
+| ---------------------------------- | ---------------------- |
+| `traceroute-geolocation`           | Route mapping          |
+| `whois-ip`                         | IP ownership           |
+| `ip-geolocation`                   | Geo lookup             |
+| `broadcast-netbios-master-browser` | Windows domain mapping |
+| `targets-ipv6-multicast`           | IPv6 discovery         |
+
+---
+
+# ⚡ 8. Default High-Value Scripts (Most Used in Real Life)
+
+These are automatically run with:
+
+```bash
+nmap -sC target
+```
+
+Top ones include:
+
+* `ftp-anon`
+* `http-title`
+* `ssh-hostkey`
+* `nbstat`
+* `smb-os-discovery`
+
+👉 Default scripts are chosen for **speed + usefulness + reliability** ([Nmap][2])
+
+---
+
+# 🧠 Real-World Workflow (How Pros Use These)
+
+Instead of running everything blindly:
+
+### Step 1 – Discovery
+
+```bash
+nmap -sn --script discovery target
+```
+
+### Step 2 – Service Scan
+
+```bash
+nmap -sV target
+```
+
+### Step 3 – Targeted NSE
+
+```bash
+nmap --script http-enum,ssl-cert -p 80,443 target
+```
+
+### Step 4 – Vulnerability Scan
+
+```bash
+nmap --script vuln target
+```
+
+---
+
+# ⚖️ Pro Tips (Important)
+
+* Don’t run **all scripts (`--script all`)** → too noisy & risky
+* Use **targeted scripts per service**
+* Combine with `-sV` for better accuracy
+* Avoid intrusive scripts unless needed
+* Always scan **with permission**
+
+---
+
+# 🔥 Key Insight
+
+Real experts don’t use:
+
+> ❌ “run all scripts”
+
+They use:
+
+> ✅ “run the *right script at the right time*”
+
+---
+
+# 🔚 Final Summary
+
+The **most powerful NSE usage strategy**:
+
+* 🔍 Discovery scripts → map environment
+* 🔐 Auth scripts → find weak access
+* 🧪 Vuln scripts → detect real risks
+* ⚙️ Enum scripts → go deep on services
+
