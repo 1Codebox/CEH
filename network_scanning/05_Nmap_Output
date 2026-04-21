@@ -1,0 +1,86 @@
+
+## 📦 Saving Nmap Output in Different Formats
+
+When running scans with Nmap, you can save results in multiple formats for later analysis, reporting, or automation.
+
+### 1. Normal Output (`-oN`)
+
+Saves output in a human-readable format (same as terminal output).
+
+```bash
+nmap -oN output.txt 192.168.1.1
+```
+
+---
+
+### 2. XML Output (`-oX`)
+
+Useful for parsing with scripts or integrating with other tools.
+
+```bash
+nmap -oX output.xml 192.168.1.1
+```
+
+---
+
+### 3. Grepable Output (`-oG`)
+
+Simplified format designed for easy searching with tools like `grep`.
+
+```bash
+nmap -oG output.gnmap 192.168.1.1
+```
+
+---
+
+### 4. All Formats at Once (`-oA`)
+
+Saves output in all three major formats simultaneously:
+
+* `.nmap` (normal)
+* `.xml`
+* `.gnmap`
+
+```bash
+nmap -oA scan_results 192.168.1.1
+```
+
+---
+
+### 5. Append Output (`--append-output`)
+
+Append results to an existing file instead of overwriting.
+
+```bash
+nmap -oN output.txt --append-output 192.168.1.1
+```
+
+---
+
+### 6. Increase Verbosity (Optional)
+
+Combine with `-v` or `-vv` for more detailed output.
+
+```bash
+nmap -v -oN verbose_output.txt 192.168.1.1
+```
+
+---
+
+### 7. Save Output While Displaying on Screen
+
+Use `tee` to both save and view output in real time:
+
+```bash
+nmap 192.168.1.1 | tee output.txt
+```
+
+---
+
+## 📝 Notes
+
+* Use XML format when integrating with automation tools.
+* Use normal format for manual review.
+* Use `-oA` for maximum flexibility.
+
+---
