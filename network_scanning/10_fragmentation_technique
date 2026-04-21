@@ -1,0 +1,287 @@
+## 🧩 Nmap Fragmentation (Advanced Guide)
+
+Fragmentation in Nmap is an evasion technique where probe packets are **split into smaller IP fragments** before being sent. The goal is to make inspection harder for firewalls/IDS that don’t properly reassemble packets.
+
+---
+
+# 🧠 Core Idea
+
+Instead of sending one complete TCP packet:
+
+👉 Nmap breaks it into **multiple tiny IP fragments**
+👉 The target host **reassembles them**
+👉 Some security devices fail to inspect fragmented traffic correctly
+
+This behavior depends on IP fragmentation defined in IPv4 fragmentation and how TCP stacks follow RFC 793.
+
+---
+
+# ⚙️ Basic Usage
+
+## 1. Enable Fragmentation (`-f`)
+
+```bash id="p8yq4t"
+nmap -f target.com
+```
+
+* Splits packets into small fragments (typically 8-byte chunks after headers)
+
+---
+
+## 2. Increase Fragmentation (`-ff`)
+
+```bash id="g4z6hf"
+nmap -ff target.com
+```
+
+* Even **smaller fragments**
+* More evasion, but slower and less reliable
+
+---
+
+## 3. Custom MTU (`--mtu`)
+
+```bash id="m3kt8x"
+nmap --mtu 24 target.com
+```
+
+* Sets custom fragment size (must be multiple of 8)
+* Gives precise control over fragmentation
+
+---
+
+# 🔍 How It Works (Packet-Level)
+
+### Normal packet:
+
+```
+[ IP Header ][ TCP Header ][ Data ]
+```
+
+### Fragmented:
+
+```
+[ IP Header ][ TCP part 1 ]
+[ IP Header ][ TCP part 2 ]
+[ IP Header ][ TCP part 3 ]
+...
+```
+
+Each fragment:
+
+* Has its own IP header
+* Contains part of the original packet
+* Uses **fragment offset** to reassemble correctly
+
+---
+
+# 🎯 Why Fragmentation Is Useful
+
+## 1. Firewall Evasion
+
+Some firewalls:
+
+* Only inspect **first fragment**
+* Ignore remaining fragments
+
+👉 Result: malicious flags may go undetected
+
+---
+
+## 2. IDS/IPS Bypass
+
+Older or poorly configured systems (e.g., Snort in weak configs):
+
+* May not reassemble fragments properly
+* Miss scan signatures
+
+---
+
+## 3. Stealth Scanning
+
+Fragmentation:
+
+* Breaks signature patterns
+* Makes detection more complex
+
+---
+
+# 🧪 Example Scenarios
+
+## Scenario 1: Basic stealth SYN scan
+
+```bash id="2o0k2z"
+nmap -sS -f target.com
+```
+
+---
+
+## Scenario 2: Aggressive evasion
+
+```bash id="b5j4nm"
+nmap -sS -ff --mtu 16 target.com
+```
+
+---
+
+## Scenario 3: Combine with decoys
+
+```bash id="z7v9kd"
+nmap -sS -f -D RND:5 target.com
+```
+
+---
+
+## Scenario 4: Slow + fragmented
+
+```bash id="q0c6xv"
+nmap -sS -f -T1 target.com
+```
+
+---
+
+# ⚠️ Limitations
+
+## 1. Modern Defenses Reassemble Packets
+
+Most modern firewalls and IDS:
+
+* Reassemble fragments before inspection
+* Detect scans normally
+
+---
+
+## 2. Network Instability
+
+Fragmentation can:
+
+* Increase packet loss
+* Cause incomplete scans
+* Reduce accuracy
+
+---
+
+## 3. OS & Network Filtering
+
+Some systems:
+
+* Drop fragmented packets entirely
+* Treat them as suspicious
+
+---
+
+## 4. Not Effective Alone
+
+Fragmentation by itself:
+
+* Rarely bypasses modern security
+* Works better when combined with other techniques
+
+---
+
+# 🛡️ Detection by Security Systems
+
+### Modern Firewalls
+
+* Perform **deep packet inspection (DPI)**
+* Reassemble fragments before filtering
+
+---
+
+### IDS/IPS
+
+Systems like Snort:
+
+* Detect fragmentation anomalies
+* Flag suspicious patterns (tiny fragments, overlaps)
+
+---
+
+# 🧠 Advanced Evasion Concepts
+
+## 1. Tiny Fragment Attack
+
+* Extremely small fragments
+* Split TCP flags across packets
+
+---
+
+## 2. Overlapping Fragments
+
+* Send fragments with conflicting offsets
+* Confuse reassembly logic
+
+*(Note: Nmap does limited support for this; advanced tools handle it better)*
+
+---
+
+## 3. Fragment + ACK/FIN Scans
+
+```bash id="n9s4ur"
+nmap -sA -f target.com
+nmap -sF -f target.com
+```
+
+---
+
+## 4. Combine with Source Spoofing
+
+```bash id="c2w8pq"
+nmap -sS -f -S spoofed_ip target.com
+```
+
+---
+
+# 🧪 Testing & Verification
+
+Use packet analyzers like:
+
+* Wireshark
+
+You’ll observe:
+
+* Multiple fragmented packets
+* Fragment offsets
+* Reassembly at destination
+
+---
+
+# 📊 When to Use Fragmentation
+
+### ✅ Use when:
+
+* Testing firewall/IDS robustness
+* Performing penetration testing
+* Dealing with legacy or misconfigured security devices
+
+---
+
+### ❌ Avoid when:
+
+* You need fast and accurate results
+* Target network drops fragments
+* Modern enterprise defenses are in place
+
+---
+
+# 🧩 Quick Comparison
+
+| Technique            | Purpose                          |
+| -------------------- | -------------------------------- |
+| Fragmentation (`-f`) | Break packets to evade detection |
+| Decoys (`-D`)        | Hide source IP                   |
+| ACK scan (`-sA`)     | Map firewall rules               |
+| FIN/NULL/Xmas        | Stealth probing                  |
+
+---
+
+# 🧠 Key Takeaways
+
+* Fragmentation splits packets to **evade inspection**
+* Relies on **IP reassembly at target**
+* Less effective against **modern security systems**
+* Best used in **combination with other evasion techniques**
+* Can reduce reliability of scans
+
+---
+
