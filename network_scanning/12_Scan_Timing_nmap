@@ -190,6 +190,7 @@ Controls the number of packets sent per second.
 
 ```bash
 nmap --min-rate 1000 --max-rate 5000 192.168.1.0/24
+nmap -sS -T2 --scan-delay 500ms --max-rate 50 target.com
 ```
 
 ------------------------------------------------------
