@@ -1,0 +1,271 @@
+## 📦 MTU (Maximum Transmission Unit) — Detailed Guide
+
+**MTU (Maximum Transmission Unit)** is the **largest size (in bytes)** of a packet that can be transmitted over a network interface **without fragmentation**.
+
+---
+
+# 🧠 Core Concept
+
+Every network link (Ethernet, Wi-Fi, VPN, etc.) has a limit on how large a packet can be.
+
+👉 If a packet is **larger than MTU**:
+
+* It gets **fragmented** (split into smaller packets), or
+* It gets **dropped** (depending on configuration)
+
+---
+
+# 📏 Common MTU Values
+
+| Network Type | Typical MTU     |
+| ------------ | --------------- |
+| Ethernet     | 1500 bytes      |
+| Wi-Fi        | 1500 bytes      |
+| VPN          | 1300–1400 bytes |
+| Loopback     | 65535 bytes     |
+
+---
+
+# ⚙️ Packet Structure & MTU
+
+An IP packet consists of:
+
+```text
+[ IP Header ][ TCP/UDP Header ][ Data ]
+```
+
+### Example (Ethernet MTU = 1500 bytes):
+
+* IP Header = 20 bytes
+* TCP Header = 20 bytes
+* Data (payload) = 1460 bytes
+
+👉 Total = 1500 bytes (fits MTU)
+
+---
+
+# 🔍 What Happens When MTU Is Exceeded?
+
+## 1. Fragmentation (IPv4)
+
+If packet > MTU:
+
+```text
+Original Packet → Fragment 1 + Fragment 2 + Fragment 3
+```
+
+Each fragment:
+
+* Has its own IP header
+* Contains part of the original data
+* Uses **fragment offset** for reassembly
+
+---
+
+## 2. Packet Drop (DF Flag Set)
+
+If **Don’t Fragment (DF)** flag is set:
+
+* Router **drops packet**
+* Sends ICMP error: *Fragmentation Needed*
+
+---
+
+# 🌐 Path MTU Discovery (PMTUD)
+
+**Path MTU Discovery** finds the **smallest MTU along the route**.
+
+Process:
+
+1. Sender sends packet with DF flag
+2. If too large → router drops it
+3. Router sends ICMP “Fragmentation Needed”
+4. Sender reduces packet size
+
+This concept is part of modern networking behavior (related to IPv4 and IPv6).
+
+---
+
+# 🔐 MTU in Security & Scanning (Nmap Context)
+
+In Nmap, MTU is used to **control fragmentation size**:
+
+### Example:
+
+```bash id="7z6q2p"
+nmap --mtu 24 target.com
+```
+
+👉 This forces Nmap to:
+
+* Break packets into **24-byte fragments**
+* Potentially bypass weak firewalls
+
+---
+
+# 🧪 MTU vs Fragmentation
+
+| Concept       | Description                         |
+| ------------- | ----------------------------------- |
+| MTU           | Maximum allowed packet size         |
+| Fragmentation | Splitting packets when MTU exceeded |
+
+---
+
+# 🎯 Why MTU Matters
+
+## 1. Performance
+
+* Larger MTU → fewer packets → better efficiency
+* Smaller MTU → more overhead → slower performance
+
+---
+
+## 2. Network Reliability
+
+Incorrect MTU:
+
+* Causes packet loss
+* Leads to slow connections
+* Breaks some applications (especially VPNs)
+
+---
+
+## 3. Security & Evasion
+
+Attackers/pentesters:
+
+* Manipulate MTU to fragment packets
+* Attempt to bypass IDS/firewalls
+
+---
+
+# ⚠️ MTU Issues in Real Networks
+
+## 1. MTU Mismatch
+
+Different devices have different MTUs:
+
+* Leads to fragmentation or drops
+
+---
+
+## 2. Black Hole MTU Problem
+
+* ICMP blocked → PMTUD fails
+* Large packets silently dropped
+* Connections hang or timeout
+
+---
+
+## 3. VPN Overhead
+
+VPN adds headers:
+
+* Reduces effective MTU
+* Requires manual tuning
+
+---
+
+# 🛠️ How to Check MTU
+
+## On Linux / Kali:
+
+```bash id="o4v0xf"
+ip link show
+```
+
+---
+
+## Using ping (test MTU)
+
+```bash id="n1f4t3"
+ping -M do -s 1472 target.com
+```
+
+* `-M do` → Don’t fragment
+* `-s` → payload size
+
+👉 Adjust size until it works → find MTU
+
+---
+
+# 🧠 MTU in IPv6
+
+In IPv6:
+
+* Routers **do NOT fragment packets**
+* Only sender handles fragmentation
+* Minimum MTU = **1280 bytes**
+
+---
+
+# 🧩 MTU and TCP MSS
+
+**MSS (Maximum Segment Size)**:
+
+* Derived from MTU
+* Example:
+
+```text
+MTU (1500) - IP Header (20) - TCP Header (20) = MSS (1460)
+```
+
+---
+
+# 🛡️ Security Perspective
+
+## Detection
+
+Modern systems:
+
+* Detect abnormal small fragments
+* Reassemble packets before inspection
+
+---
+
+## Evasion Attempts
+
+Using small MTU:
+
+```bash id="r6b8n2"
+nmap -f --mtu 16 target.com
+```
+
+👉 Tries to:
+
+* Split flags across fragments
+* Evade detection
+
+---
+
+# 📊 When to Adjust MTU
+
+### ✅ Use cases:
+
+* Troubleshooting slow networks
+* VPN optimization
+* Firewall/IDS testing
+* Penetration testing
+
+---
+
+### ❌ Avoid:
+
+* Randomly changing MTU in production
+* Using extremely low MTU (causes inefficiency)
+
+---
+
+# 🧠 Key Takeaways
+
+* MTU = **maximum packet size without fragmentation**
+* Exceeding MTU → fragmentation or drop
+* Critical for:
+
+  * Performance
+  * Reliability
+  * Security testing
+* In tools like Nmap, MTU is used for **evasion techniques**
+
+---
