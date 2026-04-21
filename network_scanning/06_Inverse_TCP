@@ -1,0 +1,237 @@
+
+# 🔍 What are Inverse TCP Flag Scans?
+
+Normally, a TCP connection starts with a SYN packet. These scans do the opposite: they send packets
+with **non-standard or “illegal” flag combinations**.
+
+They rely on behavior defined in RFC 793:
+
+* **Closed ports** → reply with **RST**
+* **Open ports** → **ignore the packet** (no response)
+
+That “silence = open” idea is what makes them *inverse* scans.
+
+---
+
+# 🧪 Types of Inverse Scans
+
+## 1. FIN Scan (`-sF`)
+
+Sends a packet with only the FIN flag set.
+
+```bash
+nmap -sF target.com
+```
+
+**Behavior:**
+
+* Open port → no response
+* Closed port → RST
+
+---
+
+## 2. NULL Scan (`-sN`)
+
+Sends a packet with **no flags set at all**.
+
+```bash
+nmap -sN target.com
+```
+
+**Behavior:**
+
+* Open port → no response
+* Closed port → RST
+
+---
+
+## 3. Xmas Scan (`-sX`)
+
+Sets multiple flags: **FIN + PSH + URG** (lit up like a Christmas tree 🎄).
+
+```bash
+nmap -sX target.com
+```
+
+**Behavior:**
+
+* Open port → no response
+* Closed port → RST
+
+---
+
+# ⚙️ How They Work (Core Idea)
+
+| Port State | Response                        |
+| ---------- | ------------------------------- |
+| Open       | No response                     |
+| Closed     | RST packet                      |
+| Filtered   | No response or ICMP unreachable |
+
+So Nmap often reports:
+
+* `open|filtered` (can’t distinguish silence)
+
+---
+
+# 🎯 Why Are These Important?
+
+### 1. Stealth & Evasion
+
+They can bypass **poorly configured firewalls** that:
+
+* Only block SYN packets
+* Don’t validate TCP flag combinations
+
+---
+
+### 2. Firewall Testing
+
+Useful for auditing firewall rules:
+
+* If FIN scan gets through but SYN scan doesn’t → firewall is weak
+
+---
+
+### 3. Low Noise Scanning
+
+Less obvious than full connection scans (`-sT`) or SYN scans (`-sS`)
+
+---
+
+# 🧠 When Should You Use Them?
+
+Use these scans when:
+
+* A SYN scan is being blocked or logged
+* You suspect weak firewall rules
+* You want quieter reconnaissance
+* You're doing penetration testing or red teaming
+
+Avoid when:
+
+* You need accurate differentiation between open and filtered ports
+* Target uses modern OS/firewalls
+
+---
+
+# ⚠️ Limitations
+
+### ❌ Not Reliable on All Systems
+
+Some operating systems (notably Windows) **don’t follow RFC 793 strictly**:
+
+* They may respond with RST even for open ports
+* Result → false negatives
+
+---
+
+### ❌ Ambiguous Results
+
+You often get:
+
+```bash
+open|filtered
+```
+
+which is not definitive
+
+---
+
+# 🛡️ Detection by IDS / Firewalls
+
+Yes—modern systems **can detect these easily**.
+
+### IDS (Intrusion Detection Systems)
+
+Tools like Snort detect:
+
+* Abnormal flag combinations
+* Signature-based patterns (NULL, FIN, Xmas)
+
+---
+
+### Firewalls
+
+Modern firewalls:
+
+* Drop invalid TCP packets
+* Normalize traffic
+* Log suspicious scans
+
+---
+
+# 🧩 Evasion Techniques
+
+These scans themselves are *basic evasion*, but you can combine them:
+
+### 1. Fragment packets
+
+```bash
+nmap -sF -f target.com
+```
+
+---
+
+### 2. Decoys
+
+```bash
+nmap -sX -D RND:5 target.com
+```
+
+---
+
+### 3. Slow timing
+
+```bash
+nmap -sN -T1 target.com
+```
+
+---
+
+### 4. Spoof source IP
+
+```bash
+nmap -sF -S spoofed_ip target.com
+```
+
+---
+
+### 5. Combine with other scans
+
+```bash
+nmap -sF -p 1-1000 target.com
+```
+
+---
+
+# 🧪 Practical Workflow
+
+1. Start with SYN scan:
+
+```bash
+nmap -sS target.com
+```
+
+2. If blocked → try inverse scans:
+
+```bash
+nmap -sF target.com
+nmap -sN target.com
+nmap -sX target.com
+```
+
+3. Compare results to identify filtering behavior
+
+---
+
+# 🧠 Keypoints
+
+* These scans exploit TCP behavior from RFC 793
+* Silence from a port is meaningful
+* Useful for **evasion and firewall testing**
+* Less reliable on modern systems
+* Detectable by modern IDS/IPS
+
+---
+
