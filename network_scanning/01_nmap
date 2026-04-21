@@ -49,7 +49,7 @@ ICMP Type 3 = destination unreachable
 ----------------------------------------------------------------------------------
 basic nmap scans:
 Simple Scan: nmap 192.168.1.1 - Scans top 1000 ports.
-Ping Scan (Host Discovery): nmap -sn 192.168.1.0/24 - Lists active hosts without port scanning.
+Ping Scan/ping sweep (Host Discovery): nmap -sn 192.168.1.0/24 - Lists active hosts without port scanning.
 Subnet/Range Scan: nmap 192.168.1.0/24 or nmap 192.168.1.1-20.
 Fast Scan: nmap -F 192.168.1.1 - Scans fewer ports for speed.
 Service Version Detection: nmap -sV <ip> - Determines service/version info.
@@ -71,19 +71,113 @@ Basic Verbose: nmap -v <target> (Shows progress, host discovery, and open ports 
 Double Verbose: nmap -vv <target> (More detailed information, including DNS and scan completion times).
 Verbose + OS Detection: nmap -v -O <target> (Provides details on OS fingerprinting).
 Verbose + Version Detection: nmap -v -sV <target> (Shows version detection progress). 
-Information Security Stack Exchange
-Information Security Stack Exchange
- +4
+
 Key Benefits of -v:
 Real-time Feedback: Shows scan completion time estimates.
 Faster Insight: Displays open ports as they are found, rather than waiting for the end of the scan.
 Troubleshooting: Essential for diagnosing network issues or unexpected scan results.
 Interactive Control: During a scan, you can press v or V to increase or decrease verbosity.
 
+-------------------------------------------------------------------------
+
+As mentioned above about ping sweep:
+A ping sweep is a simple network discovery technique used to find which devices are alive (reachable) on a network.
+
+What “ping sweep” means
+You take a range of IP addresses (like 192.168.0.1–254)
+Send a probe (ping or similar) to each one
+Any device that responds is marked as “up”
+
+👉 It’s basically:
+“Who’s online in this network?”
+
+Command using Nmap
+
+With Nmap, the modern ping sweep command is:
+
+nmap -sn 192.168.0.0/24
+What this does
+-sn → Host discovery only (no port scanning)
+192.168.0.0/24 → Scans all 254 usable IPs in that subnet
+What you’ll see
+
+Example output:
+
+Nmap scan report for 192.168.0.1
+Host is up
+Nmap scan report for 192.168.0.5
+Host is up
+
+→ These are the devices currently connected
+
+Important detail (many people miss this)
+
+A “ping sweep” doesn’t always use just ICMP ping.
+
+Nmap may use:
+
+ICMP echo (traditional ping)
+ARP requests (on local networks)
+TCP probes (like SYN to port 443)
+
+This makes it more reliable than basic ping.
+
+Alternative (old command)
+nmap -sP 192.168.0.0/24
+Same thing, but deprecated
+Use -sn instead
+Simple analogy
 
 
+-------------------------------------------------
+The -Pn option in Nmap changes how Nmap treats the target before scanning.
 
+What nmap -Pn <ip> means
+-Pn = “No ping”
+It tells Nmap:
+👉 “Don’t check if the host is up, just assume it is and scan it anyway.”
 
++++++++++++++++++++
+Why this matters
 
+Normally, Nmap does this first:
+
+Sends a ping / host discovery probe
+If the host doesn’t respond → Nmap assumes it’s down and skips it
+
+With -Pn:
+
+Nmap skips that check completely
+It goes straight into port scanning
+
++++++++++++++++++++
+
+When you use it
+
+Use -Pn when:
+You know the host the up
+A device is blocking ping/ICMP
+You suspect a firewall is hiding the host
+
+Nmap says:
+
+Host seems down
+
+but you know it’s actually up
+
++++++++++++++++++++
+
+Example
+nmap -Pn 192.168.0.122
+
+Even if the device ignores ping:
+
+Nmap will still try ports like 80, 443, 22, etc.
+Trade-offs
+🐢 Slower → because it scans even dead hosts
+🔍 More reliable in restricted networks
+⚠️ Can waste time if many IPs are actually offline
+
+------------------------------------------------------------------------------------
 
 
