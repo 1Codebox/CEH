@@ -1,0 +1,310 @@
+
+# 🧠 Nmap Scripting Engine (NSE) — Complete Guide
+
+The **Nmap Scripting Engine (NSE)** is one of the most powerful features of Nmap. It transforms Nmap from a simple port scanner into a **flexible security automation framework** capable of discovery, enumeration, vulnerability detection, and even custom workflows.
+
+---
+
+# 📌 1. What is NSE?
+
+NSE allows you to run **Lua-based scripts** during Nmap scans to:
+
+* Automate repetitive security checks
+* Gather detailed service information
+* Detect vulnerabilities and misconfigurations
+* Interact with network services
+
+👉 Think of NSE as **“plugins for Nmap”**.
+
+---
+
+# ⚙️ 2. How NSE Works (Architecture)
+
+NSE consists of three main components:
+
+### 🧩 Script (`.nse`)
+
+* Written in **Lua**
+* Defines logic for scanning or interacting with a service
+
+### 📚 Libraries
+
+* Prebuilt helper modules (e.g., HTTP, SMB, DNS)
+* Reduce complexity when writing scripts
+
+### 🔄 Execution Engine
+
+* Runs scripts in parallel
+* Integrates with Nmap scan phases
+
+---
+
+# 📂 3. Script Categories
+
+NSE scripts are grouped by purpose:
+
+| Category    | Purpose                                      |
+| ----------- | -------------------------------------------- |
+| `default`   | Safe, commonly useful scripts                |
+| `safe`      | Non-intrusive                                |
+| `intrusive` | May affect services                          |
+| `auth`      | Authentication checks                        |
+| `vuln`      | Vulnerability detection                      |
+| `discovery` | Network/service discovery                    |
+| `exploit`   | Demonstration (controlled environments only) |
+| `brute`     | Credential brute force (authorized use only) |
+
+---
+
+# 🚀 4. Basic Usage
+
+## ▶️ Run Default Scripts
+
+```bash
+nmap -sC target.com
+```
+
+## ▶️ Run Specific Script
+
+```bash
+nmap --script http-title target.com
+```
+
+## ▶️ Run Entire Category
+
+```bash
+nmap --script vuln target.com
+```
+
+---
+
+# 🎯 5. Why Use NSE?
+
+## ✅ Benefits
+
+* Saves time (automation)
+* Deep service inspection
+* Extensible and customizable
+* Integrates with scanning phases
+
+## 📍 Where helpful
+
+* Penetration testing (authorized)
+* Vulnerability scanning
+* Network audits
+* SOC analysis
+
+---
+
+# 📅 6. When to Use NSE
+
+| Scenario           | Usage               |
+| ------------------ | ------------------- |
+| Quick scan         | `-sC`               |
+| Vulnerability scan | `--script vuln`     |
+| Web testing        | HTTP scripts        |
+| Internal audit     | Multiple categories |
+| Deep analysis      | Custom scripts      |
+
+---
+
+# 🔍 7. Practical Examples
+
+## 🌐 HTTP Enumeration
+
+```bash
+nmap -p 80 --script http-enum target.com
+```
+
+## 🔐 Check SSL Info
+
+```bash
+nmap --script ssl-cert -p 443 target.com
+```
+
+## 🧪 Vulnerability Scan
+
+```bash
+nmap --script vuln target.com
+```
+
+---
+
+# ⚡ 8. Advanced Script Usage
+
+## 🎛️ Script Arguments (`--script-args`)
+
+Customize script behavior:
+
+```bash
+nmap --script http-brute --script-args userdb=users.txt,passdb=pass.txt target.com
+```
+
+## 🔍 Multiple Scripts
+
+```bash
+nmap --script "http-*,ssl-*" target.com
+```
+
+## ⏱️ Combine with Timing
+
+```bash
+nmap -T4 --script vuln target.com
+```
+
+---
+
+# 🧬 9. Writing Your Own NSE Script (Beginner → Advanced)
+
+## 🧱 Basic Script Structure
+
+```lua
+description = [[
+Simple example script
+]]
+
+author = "Your Name"
+license = "Same as Nmap"
+categories = {"discovery"}
+
+portrule = function(host, port)
+  return port.open
+end
+
+action = function(host, port)
+  return "Port is open!"
+end
+```
+
+---
+
+## 🧠 Key Components
+
+### 🔹 `portrule` / `hostrule`
+
+* Defines when script runs
+
+### 🔹 `action`
+
+* Main logic
+
+---
+
+## 📚 Using Libraries
+
+Example with HTTP:
+
+```lua
+local http = require "http"
+
+action = function(host, port)
+  local response = http.get(host, port, "/")
+  return response.status
+end
+```
+
+---
+
+# 🧪 10. Intermediate Techniques
+
+## 🔄 Parallel Execution
+
+NSE runs scripts concurrently → faster scans
+
+## 🔗 Chaining Logic
+
+Combine multiple checks in one script
+
+## 📊 Structured Output
+
+Return tables for better reporting
+
+---
+
+# 🧠 11. Advanced (Pro-Level) NSE Techniques
+
+## ⚙️ 1. Custom Vulnerability Detection
+
+* Build scripts to detect organization-specific issues
+
+## 🧩 2. Protocol Interaction
+
+* Speak directly with services (e.g., FTP, SMB)
+
+## 🔍 3. Banner Grabbing + Analysis
+
+* Extract and parse service banners intelligently
+
+## 🧬 4. Stateful Scanning
+
+* Maintain session across requests
+
+## 🌐 5. API Testing via NSE
+
+* Interact with REST endpoints
+
+---
+
+# 🔐 12. Security & Safety Considerations
+
+⚠️ Some NSE scripts:
+
+* Can crash services
+* Generate heavy traffic
+* Trigger alerts
+
+👉 Always:
+
+* Use in **authorized environments only**
+* Test in labs first
+* Prefer `safe` category initially
+
+---
+
+# ⚖️ 13. NSE vs Traditional Tools
+
+| Feature       | NSE  | Traditional Tools |
+| ------------- | ---- | ----------------- |
+| Automation    | ✅    | ❌                 |
+| Integration   | ✅    | ❌                 |
+| Customization | High | Medium            |
+| Speed         | High | Depends           |
+
+---
+
+# 🧠 14. Best Practices
+
+* Start with `-sC`
+* Use categories instead of all scripts
+* Avoid `intrusive` unless necessary
+* Combine with version detection (`-sV`)
+* Write custom scripts for unique needs
+
+---
+
+# 🧪 15. Real-World Workflow Example
+
+```bash
+# Step 1: Discover hosts
+nmap -sn 192.168.1.0/24
+
+# Step 2: Scan ports + services
+nmap -sV 192.168.1.10
+
+# Step 3: Run scripts
+nmap --script vuln,auth 192.168.1.10
+```
+
+---
+
+# 🔚 Conclusion
+
+The **Nmap Scripting Engine** turns Nmap into a:
+
+* 🔍 Deep analysis tool
+* ⚙️ Automation engine
+* 🧠 Smart reconnaissance platform
+
+Mastering NSE means moving from **basic scanning → intelligent security testing**.
+
+---
