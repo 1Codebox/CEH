@@ -1,0 +1,225 @@
+
+# Nmap NSE FTP Enumeration – Complete Guide
+
+## 📌 Introduction
+
+FTP (File Transfer Protocol) is a commonly exposed service during reconnaissance and often a **high-value target** in penetration testing due to misconfigurations.
+
+Using the **Nmap Scripting Engine (NSE)** in Nmap, you can automate FTP enumeration to extract:
+
+* Anonymous login access
+* User accounts
+* File listings
+* Server configuration details
+* Vulnerabilities
+
+---
+
+## 🔍 What is FTP Enumeration?
+
+FTP enumeration is the process of gathering information from an FTP service running on:
+
+* **Port 21 (default)**
+
+The goal is to identify:
+
+* Weak authentication
+* Misconfigured permissions
+* Sensitive files
+
+---
+
+## ⚙️ Basic FTP Enumeration with Nmap
+
+### 1. Detect FTP Service
+
+```bash id="n84s2h"
+nmap -p 21 -sV <target>
+```
+
+This confirms:
+
+* FTP is running
+* Service version (e.g., vsFTPd, ProFTPD)
+
+---
+
+## 🚀 Key NSE Scripts for FTP Enumeration
+
+### 1. Anonymous Login Check
+
+```bash id="vts2qf"
+nmap -p 21 --script=ftp-anon <target>
+```
+
+🔎 Checks:
+
+* Whether anonymous login is enabled
+
+📊 Example Output:
+
+```
+Anonymous FTP login allowed (FTP code 230)
+drwxr-xr-x    2 ftp      ftp          4096 Jan 01 00:00 pub
+```
+
+---
+
+### 2. FTP Banner Grabbing
+
+```bash id="b6g0xv"
+nmap -p 21 --script=banner <target>
+```
+
+🔎 Retrieves:
+
+* FTP server software
+* Version info
+
+---
+
+### 3. FTP System Information
+
+```bash id="k2f8bx"
+nmap -p 21 --script=ftp-syst <target>
+```
+
+🔎 Reveals:
+
+* Operating system type
+* FTP server details
+
+---
+
+### 4. FTP File Listing
+
+```bash id="0q9h5x"
+nmap -p 21 --script=ftp-ls <target>
+```
+
+🔎 Lists:
+
+* Files and directories available
+
+---
+
+### 5. FTP Brute Force (Controlled Use Only)
+
+```bash id="7x2mfw"
+nmap -p 21 --script=ftp-brute <target>
+```
+
+🔎 Attempts:
+
+* Username/password guessing
+
+⚠️ Use only in authorized environments.
+
+---
+
+### 6. FTP Bounce Attack Check
+
+```bash id="gh2vxp"
+nmap -p 21 --script=ftp-bounce <target>
+```
+
+🔎 Tests:
+
+* Whether the server can be abused for port scanning
+
+---
+
+### 7. FTP Vulnerability Scripts
+
+```bash id="p3q9hz"
+nmap -p 21 --script=ftp-vuln* <target>
+```
+
+🔎 Checks for:
+
+* Known FTP vulnerabilities
+
+---
+
+## 🧠 Combine Multiple Scripts
+
+```bash id="y3v5ra"
+nmap -p 21 --script=ftp-anon,ftp-syst,ftp-ls,banner <target>
+```
+
+👉 Efficient way to gather maximum information in one scan.
+
+---
+
+## 📊 Example Full Enumeration
+
+```bash id="tq4j9w"
+PORT   STATE SERVICE
+21/tcp open  ftp
+| ftp-anon: Anonymous FTP login allowed
+| ftp-syst: UNIX system type
+| ftp-ls:
+|   drwxr-xr-x  2 ftp ftp 4096 pub
+| banner: vsFTPd 3.0.3
+```
+
+### Interpretation:
+
+* Anonymous login enabled
+* Server running on UNIX
+* Public directory accessible
+* FTP software identified
+
+---
+
+## 🎯 Real-World Use Cases
+
+* Finding publicly accessible files
+* Discovering backup/config files
+* Identifying weak credentials
+* Mapping attack surface
+
+---
+
+## ⚠️ Common Misconfigurations Found
+
+* Anonymous login enabled
+* Writable directories
+* Weak passwords
+* Outdated FTP software
+
+---
+
+## 🛡️ Defensive Measures
+
+To secure FTP services:
+
+* Disable anonymous login
+* Use strong authentication
+* Restrict file permissions
+* Prefer secure alternatives like SFTP
+* Keep software updated
+
+---
+
+## ⚖️ Legal Considerations
+
+Always ensure proper authorization before performing enumeration using Nmap. Unauthorized scanning may be illegal.
+
+---
+
+## 📚 Conclusion
+
+Nmap NSE scripts provide a powerful way to automate FTP enumeration. By combining multiple scripts, you can quickly uncover misconfigurations, sensitive data exposure, and potential vulnerabilities in FTP services.
+
+---
+
+## 🔗 Useful Script Categories
+
+You can explore more scripts using:
+
+```bash id="4yr9bw"
+ls /usr/share/nmap/scripts | grep ftp
+```
+
+-----------------------------------------
