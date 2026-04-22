@@ -75,6 +75,9 @@ nmap --script http-title target.com
 ```bash
 nmap --script vuln target.com
 ```
+other important example scripts:
+nmap -p 21 --script ftp-anon, ftp-vsftpd-backdoor <target ip>    //first check anon login then backdoor vul exploit test
+nmap -p 21 --script "ftp-*" <target ip>    //run all script and check vul related to ftp service
 
 ---
 
