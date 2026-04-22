@@ -1,0 +1,193 @@
+
+# Nmap Banner Grabbing – Detailed Guide
+
+## 📌 Introduction
+
+Banner grabbing is a technique used in **network reconnaissance** to collect information about services running on open ports. It helps identify details such as:
+
+* Service type (e.g., HTTP, FTP, SSH)
+* Software name (e.g., Apache, OpenSSH)
+* Version numbers
+* Operating system hints
+
+In **Nmap**, banner grabbing is performed as part of service and version detection, allowing security professionals to map a target system’s attack surface.
+
+---
+
+## 🔍 What is Banner Grabbing?
+
+A *banner* is the response returned by a service when a connection is established. For example:
+
+* A web server might return headers like `Server: Apache/2.4.41`
+* An SSH service may reveal `OpenSSH_8.2`
+
+Banner grabbing involves sending requests to a target port and analyzing these responses.
+
+---
+
+## ⚙️ How Nmap Performs Banner Grabbing
+
+Nmap uses its **service detection engine** (`-sV`) to probe open ports with a series of carefully crafted requests.
+
+### Key Features:
+
+* Sends multiple probes based on port/service
+* Matches responses against a signature database (`nmap-service-probes`)
+* Identifies service name and version
+
+---
+
+⚙️ Basic Usage
+Run Banner Script on a Target
+nmap --script=banner <target>
+
+This will:
+
+Scan common ports
+Attempt to grab banners from discovered services
+-----------------
+
+Combine with Service Detection
+nmap -sV --script=banner <target>
+
+This gives you:
+
+Structured service detection (-sV)
+Raw banner output (banner script)
+
+----------------------------
+nmap -F -T4 --script banner <target>
+
+Scan Specific Ports
+nmap -p 21,22,25,80,110 --script=banner <target>
+
+-----------------------------
+Combine with Other NSE Scripts
+nmap --script=banner,http-title,ssh-hostkey <target>
+
+This enhances reconnaissance by combining:
+
+Banner grabbing
+Web title extraction
+SSH key fingerprinting
+
+------------------------------
+## 🧠 Advanced Banner Grabbing Techniques
+
+### 1. Increase Detection Intensity
+
+```bash
+nmap -sV --version-intensity 9 <target>
+```
+
+* Range: 0 (light) to 9 (aggressive)
+* Higher intensity = more probes = more accurate results
+
+---
+
+### 2. Use Default Scripts
+
+```bash
+nmap -sC -sV <target>
+```
+
+This runs Nmap’s default NSE scripts along with version detection.
+
+---
+
+### 3. Banner Script
+
+```bash
+nmap --script=banner <target>
+```
+
+The `banner` script explicitly grabs banners from open ports.
+
+---
+
+### 4. Combine Scripts and Version Detection
+
+```bash
+nmap -sV --script=banner,version <target>
+```
+
+Provides deeper insights into services.
+
+---
+
+## 📊 Example Output
+
+```bash
+PORT    STATE SERVICE VERSION
+22/tcp  open  ssh     OpenSSH 8.2p1 Ubuntu
+80/tcp  open  http    Apache httpd 2.4.41
+443/tcp open  https   nginx 1.18.0
+```
+
+### Interpretation:
+
+* Port 22 → SSH running OpenSSH 8.2
+* Port 80 → Apache web server
+* Port 443 → Nginx HTTPS server
+
+---
+
+## 🔐 Why Banner Grabbing Matters
+
+### 1. Vulnerability Identification
+
+Knowing the exact version helps map known vulnerabilities (e.g., CVEs).
+
+### 2. Attack Surface Mapping
+
+Helps identify exposed services and unnecessary ports.
+
+### 3. Penetration Testing
+
+Used in the **reconnaissance phase** of ethical hacking.
+
+---
+
+## ⚠️ Limitations
+
+* Some services hide or obfuscate banners
+* Firewalls/IDS may block or alter responses
+* False positives can occur
+* Aggressive scans may be detected
+
+---
+
+## 🛡️ Defensive Measures
+
+To prevent banner grabbing:
+
+* Disable unnecessary services
+* Use firewalls and IDS/IPS
+* Modify or hide service banners
+* Keep software updated
+
+---
+
+## ⚖️ Legal and Ethical Considerations
+
+Banner grabbing should only be performed on:
+
+* Systems you own
+* Systems you have explicit permission to test
+
+Unauthorized scanning may be illegal and violate policies.
+
+---
+
+## 📚 Conclusion
+
+Banner grabbing with Nmap is a powerful technique for identifying services and their versions. By leveraging Nmap’s advanced scanning capabilities, security professionals can gain valuable insights into a system’s configuration and potential vulnerabilities.
+
+---
+
+## 🔗 References
+
+* Official Nmap Documentation
+* `nmap-service-probes` database
+* NSE (Nmap Scripting Engine) scripts
+
