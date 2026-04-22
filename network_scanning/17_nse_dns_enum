@@ -1,0 +1,220 @@
+
+# Nmap NSE DNS Enumeration – Guide
+
+## 📌 Introduction
+
+DNS (Domain Name System) is a critical component of any network and often leaks valuable information during reconnaissance. Using the **Nmap Scripting Engine (NSE)** in Nmap, you can automate DNS enumeration to uncover:
+
+* Subdomains
+* DNS records (A, MX, NS, TXT)
+* Zone transfer misconfigurations
+* Hostnames and IP mappings
+
+---
+
+## 🔍 What is DNS Enumeration?
+
+DNS enumeration is the process of extracting information from a DNS server to map a target’s infrastructure.
+
+### Common Goals:
+
+* Identify subdomains
+* Discover mail servers
+* Map internal/external hosts
+* Detect misconfigured DNS servers
+
+---
+
+## ⚙️ Basic DNS Enumeration with Nmap
+
+### Scan DNS Port (53)
+
+```bash id="q4k6nt"
+nmap -p 53 -sU -sV <target>
+```
+
+* `-sU` → UDP scan (DNS primarily uses UDP)
+* `-sV` → Version detection
+
+---
+
+## 🚀 Key NSE Scripts for DNS Enumeration
+
+### 1. DNS Brute Force (Subdomain Discovery)
+
+```bash id="c2g9ra"
+nmap --script=dns-brute <target>
+```
+
+🔎 Finds:
+
+* Subdomains using a built-in wordlist
+
+---
+
+### 2. DNS Zone Transfer
+
+```bash id="0c4czi"
+nmap --script=dns-zone-transfer -p 53 <target>
+```
+
+🔎 Checks:
+
+* Whether the DNS server allows **zone transfer (AXFR)**
+
+📊 If successful, it may reveal:
+
+* All subdomains
+* Internal hostnames
+* Network structure
+
+---
+
+### 3. DNS Record Enumeration
+
+```bash id="jpj1j6"
+nmap --script=dns-recursion <target>
+```
+
+🔎 Checks:
+
+* Whether recursion is enabled (can be abused)
+
+---
+
+### 4. Reverse DNS Lookup
+
+```bash id="pllsq6"
+nmap --script=dns-reverse <target>
+```
+
+🔎 Maps:
+
+* IP addresses → hostnames
+
+---
+
+### 5. DNS Cache Snooping
+
+```bash id="45xz7l"
+nmap --script=dns-cache-snoop <target>
+```
+
+🔎 Reveals:
+
+* Cached DNS queries
+* Previously visited domains
+
+---
+
+### 6. DNS Service Discovery
+
+```bash id="53w8q4"
+nmap --script=dns-service-discovery <target>
+```
+
+🔎 Identifies:
+
+* Services advertised via DNS
+
+---
+
+### 7. DNS NS and MX Records
+
+```bash id="8qsd9p"
+nmap --script=dns-nsid,dns-mx,dns-ns <target>
+```
+
+🔎 Retrieves:
+
+* Name servers (NS)
+* Mail servers (MX)
+* DNS server identifiers
+
+---
+
+## 🧠 Combine Multiple DNS Scripts
+
+```bash id="fy92v3"
+nmap -p 53 --script=dns-brute,dns-zone-transfer,dns-ns,dns-mx <target>
+```
+
+👉 Efficient for full DNS enumeration in one command.
+
+---
+
+## 📊 Example Output
+
+```bash id="qv1u6s"
+PORT   STATE SERVICE
+53/tcp open  domain
+| dns-brute:
+|   www.example.com
+|   mail.example.com
+| dns-ns:
+|   ns1.example.com
+| dns-mx:
+|   mail.example.com
+```
+
+### Interpretation:
+
+* Subdomains discovered
+* Name servers identified
+* Mail server located
+
+---
+
+## 🎯 Real-World Use Cases
+
+* Subdomain enumeration for bug bounty
+* Identifying attack surfaces
+* Discovering hidden services
+* Mapping infrastructure
+
+---
+
+## ⚠️ Common Misconfigurations
+
+* Open zone transfer (AXFR enabled)
+* Recursive DNS enabled publicly
+* Cache snooping possible
+* Exposure of internal hostnames
+
+---
+
+## 🛡️ Defensive Measures
+
+To secure DNS:
+
+* Disable zone transfers for unauthorized users
+* Restrict recursion to trusted IPs
+* Use DNS logging and monitoring
+* Harden DNS server configurations
+
+---
+
+## ⚖️ Legal Considerations
+
+Only perform DNS enumeration on systems you **own or have permission to test**. Unauthorized use of Nmap may be illegal.
+
+---
+
+## 📚 Conclusion
+
+DNS enumeration using NSE scripts is a powerful reconnaissance technique that can reveal critical infrastructure details. Misconfigured DNS servers can expose an entire network, making this step essential in penetration testing.
+
+---
+
+## 🔗 Useful Tip
+
+List all DNS-related scripts:
+
+```bash id="x8i9wx"
+ls /usr/share/nmap/scripts | grep dns
+```
+## zone tranfer custom commands:
+
+nmap -Pn --script dns-brute --script-args dns-brute.threads=5,dns-brute.hostlist=/usr/share/wordlists/SecLists/Discovery/
+DNS/fierce-hostList.txt zonetransfer.me
+--------------------------------------------------------------
