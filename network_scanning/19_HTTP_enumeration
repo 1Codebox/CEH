@@ -1,0 +1,194 @@
+
+# Nmap NSE – HTTP Enumeration: Detecting HTTP Methods
+
+## Overview
+
+HTTP method enumeration is a critical step in web application reconnaissance. By identifying which HTTP methods a server supports (such as `GET`, `POST`, `PUT`, `DELETE`, etc.), security testers can uncover misconfigurations, insecure endpoints, or unintended functionality that could be exploited.
+
+This guide explains how to use **Nmap’s NSE (Nmap Scripting Engine)** to enumerate supported HTTP methods on a target server, interpret the results, and understand their security implications.
+
+---
+
+## Why HTTP Method Enumeration Matters
+
+Web servers are expected to support only necessary HTTP methods. However, misconfigured servers may allow dangerous methods such as:
+
+* `PUT` – Upload arbitrary files
+* `DELETE` – Remove resources
+* `TRACE` – Enable Cross-Site Tracing (XST)
+* `OPTIONS` – Reveal allowed methods (useful for attackers)
+
+Identifying these methods helps:
+
+* Detect insecure configurations
+* Assess attack surface
+* Plan further exploitation or testing steps
+
+---
+
+## Nmap NSE Scripts for HTTP Method Detection
+
+Nmap provides built-in NSE scripts specifically designed for HTTP enumeration:
+
+### 1. `http-methods`
+
+This script enumerates supported HTTP methods by sending requests and analyzing server responses.
+
+### Basic Usage
+
+```bash
+nmap -p 80 --script http-methods <target>
+```
+
+### Example
+
+```bash
+nmap -p 80 --script http-methods 192.168.1.1
+```
+
+### Sample Output
+
+```
+PORT   STATE SERVICE
+80/tcp open  http
+| http-methods:
+|   Supported Methods: GET HEAD POST OPTIONS
+|   Potentially risky methods: TRACE
+```
+
+---
+
+### 2. `http-methods` with Arguments
+
+You can increase verbosity and accuracy using script arguments:
+
+```bash
+nmap -p 80 --script http-methods --script-args http-methods.test-all=true <target>
+```
+
+#### Explanation:
+
+* `test-all=true` forces the script to test all possible HTTP methods rather than relying only on the `OPTIONS` response.
+
+---
+
+## Common HTTP Methods and Risk Analysis
+
+| Method  | Description                      | Risk Level |
+| ------- | -------------------------------- | ---------- |
+| GET     | Retrieve data                    | Low        |
+| POST    | Submit data                      | Low        |
+| HEAD    | Headers only                     | Low        |
+| OPTIONS | Lists allowed methods            | Medium     |
+| PUT     | Upload files                     | High       |
+| DELETE  | Delete resources                 | High       |
+| TRACE   | Echo request (XST vulnerability) | Medium     |
+| CONNECT | Proxy tunneling                  | Medium     |
+
+---
+
+## Interpreting Results
+
+### Safe Configuration
+
+```
+Supported Methods: GET HEAD POST
+```
+
+* Only essential methods are enabled.
+
+### Potentially Vulnerable Configuration
+
+```
+Supported Methods: GET POST PUT DELETE TRACE OPTIONS
+```
+
+This indicates:
+
+* File upload capability (`PUT`)
+* File deletion (`DELETE`)
+* Possible XST attack (`TRACE`)
+
+---
+
+## Advanced Scanning Techniques
+
+### Scan Multiple Ports
+
+```bash
+nmap -p 80,443 --script http-methods <target>
+```
+
+### Combine with Service Detection
+
+```bash
+nmap -sV -p 80 --script http-methods <target>
+```
+
+### Aggressive Scan (Not Always Recommended)
+
+```bash
+nmap -A -p 80 --script http-methods <target>
+```
+
+---
+
+## Real-World Attack Scenarios
+
+1. **File Upload via PUT**
+
+   * Upload a malicious shell if `PUT` is enabled.
+   * Example:
+
+     ```bash
+     curl -X PUT http://target/shell.php --data "<?php system($_GET['cmd']); ?>"
+     ```
+
+2. **Cross-Site Tracing (XST)**
+
+   * Exploit `TRACE` to steal cookies via JavaScript.
+
+3. **Unauthorized Deletion**
+
+   * Abuse `DELETE` method to remove critical resources.
+
+---
+
+## Mitigation Strategies
+
+* Disable unnecessary HTTP methods on the server.
+* Configure web servers properly:
+
+  * Apache: Use `Limit` directive
+  * Nginx: Restrict methods via configuration
+* Implement Web Application Firewall (WAF)
+* Regularly audit using tools like Nmap
+
+---
+
+## Best Practices
+
+* Always perform method enumeration during reconnaissance.
+* Combine results with other scans (directories, vulnerabilities).
+* Validate findings manually where necessary.
+* Avoid aggressive scans on production without permission.
+
+---
+
+## Conclusion
+
+HTTP method enumeration using Nmap NSE is a simple yet powerful technique to identify potential security risks in web servers. By leveraging the `http-methods` script, security professionals can quickly detect dangerous configurations and take appropriate mitigation steps.
+
+---
+
+## References
+
+* Nmap NSE Documentation
+* OWASP Testing Guide – HTTP Methods
+* RFC 7231 – Hypertext Transfer Protocol (HTTP/1.1)
+
+---
+
+## Disclaimer
+
+This guide is intended for educational and authorized security testing purposes only. Do not scan systems without proper permission.
