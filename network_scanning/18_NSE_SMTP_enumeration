@@ -1,0 +1,286 @@
+
+# 📧 Nmap NSE SMTP Enumeration Guide
+
+## 🔍 Overview
+
+SMTP (Simple Mail Transfer Protocol) is commonly used for sending emails across networks. Misconfigured SMTP servers can leak valuable information such as valid usernames, server capabilities, and authentication methods.
+
+Nmap’s **NSE (Nmap Scripting Engine)** provides powerful scripts to enumerate SMTP services efficiently during penetration testing or security assessments.
+
+---
+
+## ⚙️ Prerequisites
+
+* Nmap installed (version 7.0+ recommended)
+* Basic understanding of SMTP protocol
+* Target system with port 25, 465, or 587 open
+
+---
+
+## 🚀 Basic SMTP Scan
+
+Start by identifying if SMTP is running:
+
+```bash
+nmap -p 25,465,587 -sV <target>
+```
+
+**Explanation:**
+
+* `-p` → Specifies SMTP ports
+* `-sV` → Detects service version
+
+---
+
+## 🧠 NSE Scripts for SMTP Enumeration
+
+Nmap includes several SMTP-specific NSE scripts located in:
+
+```
+/usr/share/nmap/scripts/
+```
+
+---
+
+## 📜 1. smtp-commands
+
+### 🔹 Purpose:
+
+Lists all supported SMTP commands on the server.
+
+### 🔹 Command:
+
+```bash
+nmap -p 25 --script smtp-commands <target>
+```
+
+### 🔹 What it reveals:
+
+* Supported commands like:
+
+  * `HELO`
+  * `EHLO`
+  * `MAIL FROM`
+  * `VRFY`
+  * `EXPN`
+  * `STARTTLS`
+
+### 🔹 Use case:
+
+Helps identify dangerous commands like `VRFY` or `EXPN` that may allow user enumeration.
+
+---
+
+## 👤 2. smtp-enum-users
+
+### 🔹 Purpose:
+
+Enumerates valid users on the SMTP server.
+
+### 🔹 Command:
+
+```bash
+nmap -p 25 --script smtp-enum-users <target>
+```
+
+### 🔹 Optional (with wordlist):
+
+```bash
+nmap -p 25 --script smtp-enum-users \
+--script-args userdb=/path/to/users.txt <target>
+```
+
+### 🔹 Techniques used:
+
+* `VRFY`
+* `EXPN`
+* `RCPT TO`
+
+### 🔹 Output example:
+
+```
+| smtp-enum-users:
+|   root exists
+|   admin exists
+|_  test does not exist
+```
+
+### ⚠️ Note:
+
+Modern SMTP servers often disable VRFY/EXPN to prevent this attack.
+
+---
+
+## 📡 3. smtp-ntlm-info
+
+### 🔹 Purpose:
+
+Extracts NTLM authentication details from SMTP servers (mainly Microsoft Exchange).
+
+### 🔹 Command:
+
+```bash
+nmap -p 25 --script smtp-ntlm-info <target>
+```
+
+### 🔹 Information gathered:
+
+* Domain name
+* Hostname
+* Windows version
+* NetBIOS name
+
+### 🔹 Use case:
+
+Useful in internal network penetration testing.
+
+---
+
+## 🔐 4. smtp-auth
+
+### 🔹 Purpose:
+
+Lists available authentication mechanisms.
+
+### 🔹 Command:
+
+```bash
+nmap -p 25 --script smtp-auth <target>
+```
+
+### 🔹 Output example:
+
+```
+AUTH LOGIN PLAIN CRAM-MD5
+```
+
+### 🔹 Why it matters:
+
+* Weak authentication methods can be exploited
+* Helps plan brute-force or credential attacks
+
+---
+
+## 🔄 5. smtp-open-relay
+
+### 🔹 Purpose:
+
+Checks if the SMTP server is an open relay.
+
+### 🔹 Command:
+
+```bash
+nmap -p 25 --script smtp-open-relay <target>
+```
+
+### 🔹 What is an open relay?
+
+A misconfigured server that allows anyone to send emails without authentication.
+
+### 🔹 Impact:
+
+* Spam abuse
+* Blacklisting of server IP
+
+---
+
+## 🔐 6. smtp-brute
+
+### 🔹 Purpose:
+
+Performs brute-force attacks on SMTP authentication.
+
+### 🔹 Command:
+
+```bash
+nmap -p 25 --script smtp-brute <target>
+```
+
+### 🔹 With custom lists:
+
+```bash
+nmap -p 25 --script smtp-brute \
+--script-args userdb=users.txt,passdb=passwords.txt <target>
+```
+
+### ⚠️ Warning:
+
+* Can trigger account lockouts
+* Use only in authorized environments
+
+---
+
+## 🔍 7. smtp-strangeport
+
+### 🔹 Purpose:
+
+Detects SMTP services running on unusual ports.
+
+### 🔹 Command:
+
+```bash
+nmap --script smtp-strangeport <target>
+```
+
+---
+
+## 🧪 Combining Multiple Scripts
+
+Run multiple scripts in one scan:
+
+```bash
+nmap -p 25 --script smtp-commands,smtp-enum-users,smtp-auth <target>
+```
+
+Or use all SMTP scripts:
+
+```bash
+nmap -p 25 --script smtp* <target>
+```
+
+---
+
+## 📊 Output Interpretation Tips
+
+* **VRFY/EXPN enabled** → User enumeration possible
+* **Weak AUTH methods** → Credential attacks feasible
+* **Open relay detected** → Critical misconfiguration
+* **NTLM info leaked** → Internal recon opportunity
+
+---
+
+## 🛡️ Mitigation & Hardening
+
+* Disable `VRFY` and `EXPN`
+* Require authentication for all mail relays
+* Use secure authentication (e.g., OAuth, TLS)
+* Enable logging and monitoring
+* Restrict SMTP access via firewall rules
+
+---
+
+## ⚠️ Legal Disclaimer
+
+This guide is for educational and authorized penetration testing purposes only. Do not scan or attack systems without explicit permission.
+
+---
+
+## 📚 References
+
+* Nmap NSE Documentation
+* RFC 5321 (SMTP Protocol)
+* OWASP Testing Guide
+
+---
+
+## ✅ Conclusion
+
+Nmap NSE scripts provide a powerful way to enumerate SMTP services quickly and effectively. Proper use can uncover:
+
+* Valid users
+* Server misconfigurations
+* Weak authentication mechanisms
+
+When combined with other reconnaissance techniques, SMTP enumeration becomes a valuable step in penetration testing.
+
+---
