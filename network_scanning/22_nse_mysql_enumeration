@@ -1,0 +1,286 @@
+
+# Nmap – NSE MySQL Enumeration
+
+## Introduction
+
+Database services are high-value targets during penetration testing, and **MySQL** is one of the most widely used relational database management systems. Misconfigurations, weak credentials, and exposed services can lead to serious security risks.
+
+**Nmap (Network Mapper)**, combined with its **Nmap Scripting Engine (NSE)**, provides powerful capabilities to enumerate MySQL services, extract metadata, and identify potential vulnerabilities.
+
+This guide covers:
+
+* MySQL enumeration using Nmap
+* Important NSE scripts for MySQL
+* Practical examples and workflows
+
+---
+
+## 1. Understanding MySQL Enumeration
+
+### What is MySQL Enumeration?
+
+MySQL enumeration is the process of gathering information from a MySQL server, such as:
+
+* Version information
+* Available databases
+* User accounts
+* Authentication methods
+* Configuration details
+
+### Default MySQL Port
+
+* **3306/TCP** → Default MySQL service port
+
+---
+
+## 2. Nmap Scripting Engine (NSE)
+
+Nmap includes a variety of scripts specifically designed for MySQL enumeration.
+
+### MySQL Script Category
+
+These scripts are located under:
+
+```
+/usr/share/nmap/scripts/mysql-*
+```
+
+---
+
+## 3. Basic MySQL Detection
+
+### Service Detection
+
+```bash
+nmap -p 3306 -sV <target>
+```
+
+**Purpose:**
+
+* Detect MySQL service
+* Identify version
+
+---
+
+## 4. Key NSE Scripts for MySQL Enumeration
+
+### 4.1 mysql-info
+
+```bash
+nmap -p 3306 --script mysql-info <target>
+```
+
+**Description:**
+
+* Retrieves basic server information
+
+**Output includes:**
+
+* MySQL version
+* Protocol version
+* Thread ID
+* Capabilities flags
+
+---
+
+### 4.2 mysql-users
+
+```bash
+nmap -p 3306 --script mysql-users <target>
+```
+
+**Description:**
+
+* Attempts to enumerate MySQL user accounts
+
+⚠️ Often requires valid credentials or misconfiguration.
+
+---
+
+### 4.3 mysql-databases
+
+```bash
+nmap -p 3306 --script mysql-databases --script-args mysqluser=root,mysqlpass= <target>
+```
+
+**Description:**
+
+* Lists available databases
+
+**Common findings:**
+
+* `information_schema`
+* `mysql`
+* Application-specific databases
+
+---
+
+### 4.4 mysql-variables
+
+```bash
+nmap -p 3306 --script mysql-variables <target>
+```
+
+**Description:**
+
+* Dumps server configuration variables
+
+**Examples:**
+
+* `version`
+* `basedir`
+* `datadir`
+
+---
+
+### 4.5 mysql-empty-password
+
+```bash
+nmap -p 3306 --script mysql-empty-password <target>
+```
+
+**Description:**
+
+* Checks for accounts with empty passwords
+
+---
+
+### 4.6 mysql-brute
+
+```bash
+nmap -p 3306 --script mysql-brute <target>
+```
+
+**Description:**
+
+* Performs brute-force attack on MySQL login
+
+⚠️ Use only in authorized environments.
+
+---
+
+### 4.7 mysql-query
+
+```bash
+nmap -p 3306 --script mysql-query --script-args "query=SELECT user(),version();" <target>
+```
+
+**Description:**
+
+* Executes custom SQL queries
+
+Requires valid credentials.
+
+---
+
+## 5. Practical Enumeration Workflow
+
+### Step 1: Identify MySQL Service
+
+```bash
+nmap -p 3306 -sV <target>
+```
+
+---
+
+### Step 2: Gather Basic Information
+
+```bash
+nmap -p 3306 --script mysql-info <target>
+```
+
+---
+
+### Step 3: Check for Weak Authentication
+
+```bash
+nmap -p 3306 --script mysql-empty-password,mysql-brute <target>
+```
+
+---
+
+### Step 4: Enumerate Users and Databases
+
+```bash
+nmap -p 3306 --script mysql-users,mysql-databases <target>
+```
+
+---
+
+### Step 5: Extract Configuration Details
+
+```bash
+nmap -p 3306 --script mysql-variables <target>
+```
+
+---
+
+## 6. Common Misconfigurations
+
+* MySQL exposed to the internet
+* Weak or empty passwords
+* Excessive privileges for users
+* Default accounts enabled
+* Sensitive databases accessible
+
+---
+
+## 7. Security Implications
+
+Successful enumeration can lead to:
+
+* Unauthorized database access
+* Data leakage
+* Privilege escalation
+* Full system compromise (in some cases)
+
+---
+
+## 8. Best Practices
+
+### For Pentesters
+
+* Combine Nmap with tools like:
+
+  * Metasploit
+  * Hydra
+  * MySQL client
+
+* Validate findings manually
+
+---
+
+### For Defenders
+
+* Restrict MySQL access (bind to localhost)
+* Use strong authentication
+* Disable remote root login
+* Regularly audit database users
+* Apply firewall rules
+
+---
+
+## 9. Limitations
+
+* Many scripts require valid credentials
+* Firewalls may block MySQL probes
+* Encrypted connections reduce visibility
+* Brute-force detection systems may trigger alerts
+
+---
+
+## 10. Conclusion
+
+Using **Nmap NSE scripts**, MySQL enumeration becomes efficient and automated. These techniques help security professionals:
+
+* Discover exposed database services
+* Identify weak configurations
+* Strengthen database security posture
+
+---
+
+## Disclaimer
+
+This material is for **educational and authorized security testing only**. Unauthorized access to systems is illegal.
+
+---
