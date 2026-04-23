@@ -1,0 +1,281 @@
+
+# Nmap – HTTP Enumeration – WAF Detection and Fingerprinting
+
+## Introduction
+
+Network reconnaissance is a critical phase in penetration testing and security assessments. Among the many tools available, **Nmap (Network Mapper)** stands out as one of the most powerful utilities for network discovery and security auditing.
+
+While Nmap is widely known for port scanning, it also includes advanced capabilities for **HTTP enumeration**, **Web Application Firewall (WAF) detection**, and **fingerprinting** through its **Nmap Scripting Engine (NSE)**.
+
+This guide provides a deep dive into:
+
+* HTTP enumeration using Nmap
+* Detecting Web Application Firewalls
+* Fingerprinting WAF technologies
+
+---
+
+## 1. Understanding HTTP Enumeration
+
+### What is HTTP Enumeration?
+
+HTTP enumeration is the process of gathering information from web servers. This includes:
+
+* Server version and technology stack
+* Supported HTTP methods
+* Hidden directories and endpoints
+* Security configurations
+
+### Why It Matters
+
+HTTP enumeration helps attackers and defenders:
+
+* Identify vulnerabilities
+* Understand application structure
+* Detect misconfigurations
+* Plan further exploitation or mitigation
+
+---
+
+## 2. Nmap Scripting Engine (NSE)
+
+Nmap’s power comes from **NSE scripts**, which automate complex reconnaissance tasks.
+
+### Script Categories Relevant to HTTP
+
+* `http-enum` → Directory and file discovery
+* `http-headers` → Extract HTTP headers
+* `http-methods` → Discover allowed HTTP methods
+* `http-server-header` → Identify server type
+* `http-title` → Extract webpage title
+
+### Example Usage
+
+```bash
+nmap -p 80,443 --script http-enum <target>
+```
+
+---
+
+## 3. HTTP Enumeration with Nmap
+
+### 3.1 Enumerating HTTP Headers
+
+```bash
+nmap -p 80 --script http-headers <target>
+```
+
+**Output includes:**
+
+* Server type (Apache, Nginx, IIS)
+* Cookies
+* Security headers (CSP, HSTS)
+
+---
+
+### 3.2 Discovering Allowed Methods
+
+```bash
+nmap -p 80 --script http-methods <target>
+```
+
+**Important Findings:**
+
+* `PUT`, `DELETE` → Potential misconfiguration
+* `TRACE` → Cross-site tracing vulnerability
+
+---
+
+### 3.3 Directory and File Enumeration
+
+```bash
+nmap -p 80 --script http-enum <target>
+```
+
+This script brute-forces common directories such as:
+
+* `/admin`
+* `/login`
+* `/backup`
+
+---
+
+## 4. Web Application Firewall (WAF)
+
+### What is a WAF?
+
+A Web Application Firewall filters and monitors HTTP traffic between a web application and the internet.
+
+### Purpose of WAF Detection
+
+* Understand defensive mechanisms
+* Adjust attack techniques
+* Identify bypass opportunities
+* Improve defensive configurations
+
+---
+
+## 5. WAF Detection Using Nmap
+
+Nmap provides dedicated scripts for detecting WAFs.
+
+### 5.1 http-waf-detect Script
+
+```bash
+nmap -p 80,443 --script http-waf-detect <target>
+```
+
+### How It Works
+
+* Sends malicious or suspicious payloads
+* Observes response differences
+* Detects filtering behavior
+
+### Output Example
+
+```
+| http-waf-detect:
+|   IDS/IPS/WAF detected:
+|     ModSecurity
+```
+
+---
+
+### 5.2 http-waf-fingerprint Script
+
+```bash
+nmap -p 80,443 --script http-waf-fingerprint <target>
+```
+
+### Purpose
+
+* Identifies the specific WAF vendor or product
+* Uses signature-based detection
+
+---
+
+## 6. WAF Fingerprinting Techniques
+
+### 6.1 Behavioral Analysis
+
+* Send crafted payloads (SQLi, XSS)
+* Analyze responses:
+
+  * Blocked requests
+  * HTTP status codes (403, 406, 501)
+
+---
+
+### 6.2 Header Analysis
+
+Look for headers such as:
+
+* `X-WAF`
+* `X-CDN`
+* `Server`
+
+Example:
+
+```
+Server: cloudflare
+```
+
+---
+
+### 6.3 Response Comparison
+
+Compare:
+
+* Normal request vs malicious request
+* Response size, timing, and codes
+
+---
+
+## 7. Common WAF Technologies
+
+Some commonly detected WAFs include:
+
+* Cloudflare
+* AWS WAF
+* ModSecurity
+* Imperva Incapsula
+* F5 BIG-IP ASM
+
+---
+
+## 8. Practical Workflow
+
+### Step-by-Step Process
+
+1. **Scan target ports**
+
+   ```bash
+   nmap -p 80,443 <target>
+   ```
+
+2. **Run HTTP enumeration**
+
+   ```bash
+   nmap -p 80,443 --script http-enum,http-headers,http-methods <target>
+   ```
+
+3. **Detect WAF**
+
+   ```bash
+   nmap -p 80,443 --script http-waf-detect <target>
+   ```
+
+4. **Fingerprint WAF**
+
+   ```bash
+   nmap -p 80,443 --script http-waf-fingerprint <target>
+   ```
+
+---
+
+## 9. Limitations
+
+* WAFs may use **stealth or evasion techniques**
+* False positives/negatives may occur
+* Signature-based detection is not always reliable
+* Advanced WAFs mimic normal server responses
+
+---
+
+## 10. Best Practices
+
+### For Pentesters
+
+* Combine Nmap with tools like:
+
+  * Burp Suite
+  * Nikto
+  * WhatWAF
+* Use proxy tools for deeper analysis
+
+### For Defenders
+
+* Disable unnecessary HTTP methods
+* Mask server headers
+* Use strong WAF rules
+* Monitor logs continuously
+
+---
+
+## Conclusion
+
+Nmap is far more than a port scanner—it is a powerful reconnaissance framework capable of performing **deep HTTP enumeration and WAF detection**.
+
+By leveraging NSE scripts, security professionals can:
+
+* Identify web technologies
+* Detect defensive mechanisms
+* Improve both offensive and defensive strategies
+
+---
+
+## Disclaimer
+
+This content is for **educational and authorized security testing purposes only**. Unauthorized scanning or probing of systems is illegal and unethical.
+
+---
