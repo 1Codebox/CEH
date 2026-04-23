@@ -1,0 +1,281 @@
+
+# Nmap NSE – HTTP Enumeration: Finding Hidden Files and Directories
+
+## 📌 Overview
+
+Hidden files and directories are often unintentionally exposed on web servers. These may include admin panels, backup files, configuration scripts, or development endpoints that are not meant for public access.
+
+Using **Nmap’s NSE (Nmap Scripting Engine)**, you can efficiently enumerate such hidden resources without relying solely on traditional brute-force tools.
+
+This guide explains how to use Nmap NSE scripts—especially `http-enum`—to discover hidden files and directories, interpret results, and understand their security implications.
+
+---
+
+## 🎯 Why Hidden File Enumeration Matters
+
+Web applications frequently leave behind sensitive endpoints such as:
+
+* `/admin` – administrative dashboards
+* `/backup` – backup archives
+* `/config.php` – configuration files
+* `/test` – development environments
+
+These can lead to:
+
+* Information disclosure
+* Unauthorized access
+* Full system compromise
+
+---
+
+## ⚙️ Nmap NSE for HTTP Enumeration
+
+Nmap includes powerful scripts within the **Nmap Scripting Engine** that help automate web enumeration.
+
+---
+
+## 🔍 1. `http-enum` Script
+
+### What it does
+
+* Checks common file and directory names
+* Uses a built-in database of known paths
+* Analyzes HTTP responses (status codes, titles, content)
+
+---
+
+### Basic Usage
+
+```bash id="1y0zrf"
+nmap -p 80 --script http-enum <target>
+```
+
+---
+
+### Example
+
+```bash id="h1l7wr"
+nmap -p 80 --script http-enum 192.168.1.10
+```
+
+---
+
+### Sample Output
+
+```id="y5wz8o"
+PORT   STATE SERVICE
+80/tcp open  http
+| http-enum:
+|   /admin/: Admin login page
+|   /backup/: Possible backup directory
+|   /phpinfo.php: PHP configuration file
+```
+
+---
+
+## 🧠 How It Works
+
+The script:
+
+1. Sends HTTP GET requests to common paths
+2. Observes responses:
+
+   * `200 OK` → resource exists
+   * `403 Forbidden` → exists but restricted
+   * `301/302` → redirected (often valid)
+3. Matches results against known fingerprints
+
+---
+
+## 📂 Types of Discoverable Resources
+
+### 🔹 Directories
+
+* `/admin/`
+* `/uploads/`
+* `/private/`
+
+### 🔹 Files
+
+* `.git/config`
+* `backup.zip`
+* `config.php`
+* `db.sql`
+
+### 🔹 Default pages
+
+* `/server-status`
+* `/phpinfo.php`
+
+---
+
+## 🚀 Advanced Usage
+
+### Enable Version Detection
+
+```bash id="6r9q3s"
+nmap -sV -p 80 --script http-enum <target>
+```
+
+---
+
+### Scan HTTPS
+
+```bash id="a3szd0"
+nmap -p 443 --script http-enum <target>
+```
+
+---
+
+### Increase Coverage (All Ports)
+
+```bash id="zv3q7x"
+nmap -p- --script http-enum <target>
+```
+
+---
+
+### Combine with Other Scripts
+
+```bash id="d0k3mz"
+nmap -p 80 --script http-enum,http-title,http-headers <target>
+```
+
+---
+
+## 🔍 Interpreting Results
+
+### ✅ Valid Findings
+
+```id="n7h4u9"
+/admin/ (200 OK)
+```
+
+* Directory exists and accessible
+
+---
+
+### ⚠️ Restricted but Interesting
+
+```id="q5j3lz"
+/backup/ (403 Forbidden)
+```
+
+* Resource exists but blocked
+* Worth further testing
+
+---
+
+### 🔁 Redirected
+
+```id="4p4bxx"
+/login → /auth/login
+```
+
+* Likely valid endpoint
+
+---
+
+### ❌ Not Found
+
+```id="v1l6jw"
+/randomfile (404)
+```
+
+* No useful information
+
+---
+
+## 🧪 Manual Verification
+
+Always verify findings:
+
+```bash id="5l9a2p"
+curl -I http://target/admin/
+```
+
+or:
+
+```bash id="z8g3c1"
+wget http://target/backup.zip
+```
+
+---
+
+## ⚠️ Limitations of `http-enum`
+
+* Uses a **fixed wordlist** (not exhaustive)
+* May miss custom or obscure paths
+* Can be blocked by:
+
+  * Firewalls
+  * WAFs
+  * Rate limiting
+
+---
+
+## 🛠️ Complementary Tools
+
+While Nmap is powerful, combine it with:
+
+* Dirb / Gobuster
+* FFUF
+* Burp Suite
+
+These provide deeper brute-force capabilities.
+
+---
+
+## 🛡️ Defensive Measures
+
+To prevent exposure:
+
+* Remove unused files and directories
+* Restrict access via authentication
+* Disable directory listing
+* Use a Web Application Firewall (WAF)
+* Regularly audit server content
+
+---
+
+## 🔥 Best Practices
+
+* Start with Nmap for quick enumeration
+* Follow up with dedicated directory brute-forcing tools
+* Validate all findings manually
+* Avoid aggressive scans on production systems
+
+---
+
+## 📊 Practical Workflow
+
+1. Initial scan:
+
+```bash id="1h9l2x"
+nmap -p 80 --script http-enum <target>
+```
+
+2. If results found:
+
+```bash id="8k3v1m"
+curl http://target/admin/
+```
+
+3. Expand enumeration:
+
+```bash id="j7p0n2"
+gobuster dir -u http://target -w wordlist.txt
+```
+
+---
+
+## 🧠 Key Takeaway
+
+> Nmap’s `http-enum` script is a fast and efficient way to discover common hidden files and directories, making it an essential first step in web application reconnaissance.
+
+---
+
+## ⚠️ Disclaimer
+
+This guide is for **educational and authorized penetration testing only**. Do not scan or enumerate systems without explicit permission.
+
