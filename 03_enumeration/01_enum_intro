@@ -1,0 +1,43 @@
+
+### 🔍 What is Enumeration?
+
+Enumeration is the process of **gathering in-depth information** such as:
+
+* Usernames and user groups
+* Network shares
+* System names and roles
+* Running services and ports
+* Password policies
+
+Unlike passive reconnaissance, enumeration is **active information gathering**. You interact directly with the target system, which makes it more detectable.
+
+---
+
+### 🧠 Why it Matters
+
+Enumeration helps an ethical hacker:
+
+* Identify valid user accounts (useful for login attacks)
+* Users, group names, network resources,system banners
+* Discover misconfigurations
+* Map out the network structure
+* Find potential entry points for further testing
+
+---
+
+### 🛠️ Common Enumeration Techniques
+
+Some typical methods include:
+
+* **DNS enumeration** → finding domain records
+* **SNMP enumeration** → extracting system/network info
+* **LDAP enumeration** → querying directory services
+* **NetBIOS enumeration** → gathering Windows network info
+* **AD enumeration** → gather info about users and group user
+---
+
+### ⚠️ Key Point
+
+Enumeration is often considered the **first real “intrusive” step** in ethical hacking, because you’re directly engaging with the system rather than just observing it.
+
+---
